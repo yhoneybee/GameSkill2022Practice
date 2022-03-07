@@ -83,7 +83,9 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
 
             CaluclateAerodynamicEffect();
 
-            CalculateLinearForces();
+            //CalculateLinearForces();
+
+            transform.Translate(new Vector3(rollInput, yawInput, pitchInput) * Time.deltaTime * 5);
 
             CalculateTorque();
 

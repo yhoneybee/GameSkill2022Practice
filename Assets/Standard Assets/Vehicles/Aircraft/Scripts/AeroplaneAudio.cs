@@ -68,8 +68,8 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
             Update();
 
             // Start the sounds playing.
-            m_EngineSoundSource.Play();
-            m_WindSoundSource.Play();
+            //m_EngineSoundSource.Play();
+            //m_WindSoundSource.Play();
         }
 
 
