@@ -16,6 +16,9 @@ public class Player : MonoBehaviour, IHitable
     [Header("---------------------------------------------------------------------------------------------------------------------------------")]
     public RectTransform rtrnAim;
     public BoxCollider confiner;
+    public Camera camMain;
+    public GameObject goLookPos;
+    public BoxCollider colBox;
     [Header("---------------------------------------------------------------------------------------------------------------------------------")]
     [Range(0f, 10f)]
     public float clampFrontMoveValue = 1;
@@ -71,6 +74,18 @@ public class Player : MonoBehaviour, IHitable
 
         var screen = Camera.main.WorldToScreenPoint(transform.position);
         rtrnAim.localPosition = new Vector3(screen.x - Screen.width / 2, screen.y - aimDistance, 0);
+
+
+
+        var dirCamToPlayer = (goLookPos.transform.position - camMain.transform.position).normalized;
+        dirCamToPlayer = new Vector3(dirCamToPlayer.x, 0, dirCamToPlayer.z);
+
+        colBox.transform.position = transform.position + dirCamToPlayer * 10;
+    }
+
+    private void FixedUpdate()
+    {
+
     }
 
     private IEnumerator ERotation()
