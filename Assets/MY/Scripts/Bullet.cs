@@ -13,13 +13,13 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        transform.LookAt(transform.position + new Vector3(dir.x, 0, dir.y));
+        transform.LookAt(transform.position + new Vector3(dir.x, dir.y, 1));
         StartCoroutine(EUpdate());
     }
 
     private void FixedUpdate()
     {
-        if (Vector3.Distance(K.player.transform.position, transform.position) >= 100)
+        if (Vector3.Distance(K.player.transform.position, transform.position) >= 10)
         {
             target = null;
             K.GetPool(ePOOL_TYPE.Bullet).Return(gameObject);
@@ -44,19 +44,12 @@ public class Bullet : MonoBehaviour
             }
             yield return K.waitPointZeroOne;
         }
-
-        yield return null;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        var hit = other.GetComponent<IHitable>();
-        if (hit != null && hit.IsEnemy() != isEnemy)
-        {
-            hit.TakeDamage(damage);
-            target = null;
-            K.GetPool(ePOOL_TYPE.Bullet).Return(gameObject);
-        }
+        //target = null;
+        //K.GetPool(ePOOL_TYPE.Bullet).Return(gameObject);
     }
 
     private void OnCollisionEnter(Collision collision)

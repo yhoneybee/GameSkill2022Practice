@@ -1,65 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 using UnityEngine.UI;
+using System;
 
-public interface IHitable
+[Serializable]
+public struct LevelInfo
 {
-    public void TakeDamage(int damage);
-    public bool IsEnemy();
+    public bool[] actives;
 }
 
-public class Player : MonoBehaviour, IHitable
+public class Player : BaseObject
 {
-    [Header("---------------------------------------------------------------------------------------------------------------------------------")]
+    [Header("Player---------------------------------------------------------------------------------------------------------------------------------")]
     public GameObject[] goBodies;
-    [Header("---------------------------------------------------------------------------------------------------------------------------------")]
     public RectTransform rtrnAim;
-    public BoxCollider confiner;
-    public Camera camMain;
-    public GameObject goLookPos;
-    public BoxCollider colBox;
-    [Header("---------------------------------------------------------------------------------------------------------------------------------")]
-    [Range(0f, 10f)]
-    public float clampFrontMoveValue = 1;
-    [Range(0f, 2f)]
-    public float divValue = 1;
-    [Range(0f, 100f)]
-    public float aimDistance = 30;
+    public GameObject[] goLunchers;
+    public LevelInfo[] levelInfos;
+    public float rateTime;
 
-    [Range(0, 1000)]
-    public int MaxHp = 100;
-
-    public int Hp
+    public int Level
     {
-        get => hp;
+        get => level;
         set
         {
-            if (value > MaxHp) hp = MaxHp;
-            else if (value <= 0) Die();
-            else hp = value;
+            value %= 5;
+            level = value;
+            LevelInfo info = levelInfos[level];
+            for (int i = 0; i < goLunchers.Length; i++)
+            {
+                goLunchers[i].SetActive(info.actives[i]);
+            }
         }
     }
-    private int hp;
+    private int level;
 
-    public int Damage
+    private void Awake()
     {
-        get => damage;
-        set => damage = value;
+        K.player = this;
     }
-    private int damage = 1;
 
-    [Range(1, 10)]
-    public int moveSpeed = 5;
-
-    public bool isNoDamage;
-
-    void Start()
+    private void Start()
     {
         StartCoroutine(ERotation());
-        StartCoroutine(EShot());
 
-        K.player = this;
+        for (int i = 0; i < goLunchers.Length; i++)
+            goLunchers[i].SetActive(false);
+
+        goLunchers[0].SetActive(true);
     }
 
     void Update()
@@ -67,23 +56,20 @@ public class Player : MonoBehaviour, IHitable
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
 
-        transform.Translate(moveSpeed * Time.deltaTime * new Vector3(x, 0, z));
+        transform.Translate(moveSpeed * Time.deltaTime * new Vector3(x, z, 0));
 
-        var size = confiner.size / divValue;
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -size.x, size.x), transform.position.y, Mathf.Clamp(transform.position.z, -size.z + clampFrontMoveValue, size.z + clampFrontMoveValue));
-
-        var screen = Camera.main.WorldToScreenPoint(transform.position);
-        rtrnAim.localPosition = new Vector3(screen.x - Screen.width / 2, screen.y - aimDistance, 0);
-
-
-
-        var dirCamToPlayer = (goLookPos.transform.position - camMain.transform.position).normalized;
-        dirCamToPlayer = new Vector3(dirCamToPlayer.x, 0, dirCamToPlayer.z);
-
-        colBox.transform.position = transform.position + dirCamToPlayer * 10;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Level++;
+        }
     }
 
     private void FixedUpdate()
+    {
+
+    }
+
+    public override void Die()
     {
 
     }
@@ -103,45 +89,7 @@ public class Player : MonoBehaviour, IHitable
         }
     }
 
-    private IEnumerator EShot()
+    public override void Shot()
     {
-        while (true)
-        {
-            //var bullet = K.GetPool(ePOOL_TYPE.Bullet).Get<Bullet>();
-            //bullet.transform.position = transform.position;
-            //bullet.speed = 30;
-            //bullet.dir = Vector2.up;
-            //bullet.damage = 1;
-            //bullet.isEnemy = IsEnemy();
-            yield return new WaitForSeconds(0.5f);
-        }
-    }
-
-    public void Die()
-    {
-    }
-
-    public void NoDamageStart()
-    {
-        isNoDamage = true;
-    }
-
-    public void NoDamageEnd()
-    {
-        isNoDamage = false;
-    }
-
-    public void TakeDamage(int damage)
-    {
-        if (isNoDamage) return;
-
-        Hp -= damage;
-
-        // Anim Notify에서 위에 함수 호출하기
-    }
-
-    public bool IsEnemy()
-    {
-        return false;
     }
 }
