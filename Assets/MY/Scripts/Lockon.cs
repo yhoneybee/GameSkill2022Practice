@@ -4,21 +4,25 @@ using UnityEngine;
 
 public class Lockon : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    public int Count
     {
-        var hit = other.GetComponent<IHitable>();
-        if (hit != null)
+        get => count;
+        set
         {
-            for (int i = -3; i <= 3; i++)
+            if (value == 0)
             {
-                var bullet = K.GetPool(ePOOL_TYPE.Bullet).Get<Bullet>();
-                bullet.target = other.gameObject;
-                bullet.transform.position = K.player.transform.position + Vector3.right * i;
-                bullet.speed = 30;
-                bullet.dir = Vector2.up;
-                bullet.damage = 1;
-                bullet.isEnemy = false;
+
             }
+            count = value;
         }
+    }
+    private int count = 7;
+
+    List<GameObject> targets = new List<GameObject>();
+
+    public void AddTarget(GameObject goTarget)
+    {
+        targets.Add(goTarget);
+        Count--;
     }
 }
