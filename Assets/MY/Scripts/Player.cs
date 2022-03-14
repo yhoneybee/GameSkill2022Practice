@@ -39,8 +39,6 @@ public class Player : BaseObject
     private void Awake()
     {
         K.player = this;
-
-        Cursor.visible = false;
     }
 
     private void Start()

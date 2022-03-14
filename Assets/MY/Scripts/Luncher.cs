@@ -23,7 +23,7 @@ public class Luncher : MonoBehaviour
     private void FixedUpdate()
     {
         K.player.rtrnAim.localPosition = Input.mousePosition - new Vector3(Screen.width / 2, Screen.height / 2);
-        goAim.transform.LookAt(K.player.rtrnAim.position);
+        goAim.transform.LookAt(K.player.rtrnAim.position - goAim.transform.position);
     }
 
     private IEnumerator EUpdate()
@@ -49,6 +49,6 @@ public class Luncher : MonoBehaviour
         var bullet = K.GetPool(ePOOL_TYPE.Bullet).Get<Bullet>();
         bullet.transform.position = goFirePos.transform.position;
         bullet.speed = 20;
-        bullet.dir = K.player.rtrnAim.position - goFirePos.transform.position;
+        bullet.transform.LookAt(K.player.rtrnAim.position);
     }
 }
