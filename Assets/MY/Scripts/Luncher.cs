@@ -30,13 +30,15 @@ public class Luncher : MonoBehaviour
     {
         yield return null;
         var wait = new WaitForSeconds(K.player.rateTime);
+        Ray ray;
         while (true)
         {
-            if (Input.GetMouseButton(0))
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out var hit, 100, 1 << LayerMask.NameToLayer("Enemy")))
             {
                 switch (luncherType)
                 {
-                    case eLUNCHER_TYPE.NormalBullet:  ShotBullet();   break;
+                    case eLUNCHER_TYPE.NormalBullet: ShotBullet(hit.point); break;
                 }
                 yield return wait;
             }
@@ -44,11 +46,12 @@ public class Luncher : MonoBehaviour
         }
     }
 
-    private void ShotBullet()
+    private void ShotBullet(Vector3 point)
     {
         var bullet = K.GetPool(ePOOL_TYPE.Bullet).Get<Bullet>();
         bullet.transform.position = goFirePos.transform.position;
         bullet.speed = 20;
-        bullet.dir = K.player.rtrnAim.position - goFirePos.transform.position;
+        bullet.dir = (point - bullet.transform.position).normalized;
+        bullet.isEnemy = false;
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public GameObject goChild;
     public float speed;
     public Vector3 dir;
     public bool isEnemy;
@@ -13,15 +14,19 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        transform.LookAt(transform.position + new Vector3(dir.x, dir.y, 1));
         StartCoroutine(EUpdate());
+    }
+
+    private void OnDisable()
+    {
+        target = null;
+        dir = Vector3.zero;
     }
 
     private void FixedUpdate()
     {
-        if (Vector3.Distance(K.player.transform.position, transform.position) >= 10)
+        if (Vector3.Distance(K.player.transform.position, transform.position) >= 20)
         {
-            target = null;
             K.GetPool(ePOOL_TYPE.Bullet).Return(gameObject);
         }
     }
@@ -30,7 +35,8 @@ public class Bullet : MonoBehaviour
     {
         while (true)
         {
-            transform.Translate(transform.forward * speed * Time.deltaTime * K.timeScale);
+            transform.Translate(dir * speed * Time.deltaTime * K.timeScale);
+            goChild.transform.LookAt(transform.position + dir);
             if (target)
             {
                 if (isGuided)
@@ -54,7 +60,6 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        target = null;
         K.GetPool(ePOOL_TYPE.Bullet).Return(gameObject);
     }
 }
