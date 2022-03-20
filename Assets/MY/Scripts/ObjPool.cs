@@ -5,6 +5,7 @@ using UnityEngine;
 public enum ePOOL_TYPE
 {
     Bullet,
+    BoomEffect,
     End,
 }
 
@@ -47,5 +48,16 @@ public class ObjPool : MonoBehaviour
     {
         obj.SetActive(false);
         objects.Add(obj);
+    }
+
+    public void WaitReturn(GameObject obj, float time)
+    {
+        StartCoroutine(EWaitReturn(obj, time));
+    }
+
+    private IEnumerator EWaitReturn(GameObject obj, float time)
+    {
+        yield return new WaitForSeconds(time);
+        Return(obj);
     }
 }

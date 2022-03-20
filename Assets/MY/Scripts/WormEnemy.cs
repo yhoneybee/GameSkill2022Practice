@@ -6,26 +6,30 @@ public class WormEnemy : BaseObject
 {
     [Header("WormEnemy---------------------------------------------------------------------------------------------------------------------------------")]
     public WormEnemy next;
-    public WormEnemy prev;
     static float distance = 2f;
 
-    private void Start()
+    private float sinV;
+
+    protected override void Start()
     {
+        base.Start();
     }
 
     private void FixedUpdate()
     {
-        if (!next) return;
-
-        var dis = Vector3.Distance(next.transform.position, transform.position);
-        if (dis > distance)
+        if (next)
         {
-            var dir = (next.transform.position - transform.position).normalized;
-            transform.Translate(dir * ((moveSpeed * Time.fixedDeltaTime) + (dis - distance)));
+            var dis = Vector3.Distance(next.transform.position, transform.position);
+            if (dis > distance)
+            {
+                var dir = (next.transform.position - transform.position).normalized;
+                transform.Translate(dir * ((moveSpeed * Time.fixedDeltaTime) + (dis - distance)));
+            }
         }
         else
         {
-
+            sinV += Time.fixedDeltaTime;
+            transform.Translate(new Vector3(0, Mathf.Sin(sinV) * 0.1f, -0.1f));
         }
     }
 

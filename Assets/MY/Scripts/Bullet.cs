@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
     public GameObject goChild;
     public float speed;
     public Vector3 dir;
-    public bool isEnemy;
+    public string targetTag;
     public int damage;
     public GameObject target;
     public bool isGuided;
@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Vector3.Distance(K.player.transform.position, transform.position) >= 20)
+        if (transform.position.z > 100)
         {
             K.GetPool(ePOOL_TYPE.Bullet).Return(gameObject);
         }
@@ -54,8 +54,13 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //target = null;
-        //K.GetPool(ePOOL_TYPE.Bullet).Return(gameObject);
+        var obj = other.GetComponent<BaseObject>();
+
+        if (!obj) return;
+        if (!other.gameObject.CompareTag(targetTag)) return;
+
+        obj.TakeDamage(damage);
+        K.GetPool(ePOOL_TYPE.Bullet).Return(gameObject);
     }
 
     private void OnCollisionEnter(Collision collision)

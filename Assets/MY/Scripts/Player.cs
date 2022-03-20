@@ -41,8 +41,9 @@ public class Player : BaseObject
         K.player = this;
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         StartCoroutine(ERotation());
 
         for (int i = 0; i < goLunchers.Length; i++)

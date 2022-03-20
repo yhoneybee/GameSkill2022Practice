@@ -16,11 +16,16 @@ public abstract class BaseObject : MonoBehaviour
             else hp = value;
         }
     }
-    private int hp;
+    public int hp;
 
     public int moveSpeed = 5;
 
     public int damage = 1;
+
+    protected virtual void Start()
+    {
+        Hp = MaxHp;
+    }
 
     public void TakeDamage(int damage)
     {
@@ -31,7 +36,13 @@ public abstract class BaseObject : MonoBehaviour
 
     public virtual void Die()
     {
-        StartCoroutine(EDie());
+        //StartCoroutine(EDie());
+        var pool = K.GetPool(ePOOL_TYPE.BoomEffect);
+        var obj = pool.Get<ParticleSystem>();
+
+        pool.WaitReturn(obj.gameObject, 2);
+        obj.transform.position = transform.position;
+        Destroy(gameObject);
     }
 
     public abstract void Shot();
