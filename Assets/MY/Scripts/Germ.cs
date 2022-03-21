@@ -11,6 +11,7 @@ public class Germ : BaseEnemy
 
     public override void Shot()
     {
+
     }
 
     // Start is called before the first frame update

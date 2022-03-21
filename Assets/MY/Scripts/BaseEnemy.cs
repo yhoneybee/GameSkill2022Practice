@@ -33,6 +33,8 @@ public abstract class BaseEnemy : BaseObject
     {
         while (true)
         {
+            if (!K.player) continue;
+
             var cmpX = Mathf.Clamp(transform.position.x, K.player.transform.position.x - 60, K.player.transform.position.x + 60);
             var cmpY = Mathf.Clamp(transform.position.y, K.player.transform.position.y - 35, K.player.transform.position.y + 35);
             transform.position = new Vector3(cmpX, cmpY, transform.position.z);
