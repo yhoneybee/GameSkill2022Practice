@@ -10,6 +10,10 @@ public static class K
 
     public static Player player = null;
 
+    public static Follow follow = null;
+
+    public static Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+
     public static ObjPool[] pools = new ObjPool[((int)ePOOL_TYPE.End)];
 
     public static ObjPool GetPool(ePOOL_TYPE poolType)

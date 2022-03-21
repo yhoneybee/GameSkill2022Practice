@@ -6,6 +6,9 @@ public enum ePOOL_TYPE
 {
     Bullet,
     BoomEffect,
+    Bacteria,
+    ScoreText,
+    Germ,
     End,
 }
 
@@ -17,7 +20,7 @@ public class ObjPool : MonoBehaviour
 
     private List<GameObject> objects = new List<GameObject>();
 
-    private void Start()
+    private void Awake()
     {
         K.pools[((int)poolType)] = this;
     }

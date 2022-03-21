@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WormEnemy : BaseObject
+public class WormEnemy : BaseEnemy
 {
     [Header("WormEnemy---------------------------------------------------------------------------------------------------------------------------------")]
     public WormEnemy next;
@@ -10,9 +10,9 @@ public class WormEnemy : BaseObject
 
     private float sinV;
 
-    protected override void Start()
+    protected override void OnEnable()
     {
-        base.Start();
+        base.OnEnable();
     }
 
     private void FixedUpdate()
@@ -35,5 +35,10 @@ public class WormEnemy : BaseObject
 
     public override void Shot()
     {
+    }
+
+    public override IEnumerator EMove()
+    {
+        yield return null;
     }
 }

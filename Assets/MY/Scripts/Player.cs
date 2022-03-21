@@ -41,9 +41,9 @@ public class Player : BaseObject
         K.player = this;
     }
 
-    protected override void Start()
+    protected override void OnEnable()
     {
-        base.Start();
+        base.OnEnable();
         StartCoroutine(ERotation());
 
         for (int i = 0; i < goLunchers.Length; i++)
@@ -72,7 +72,7 @@ public class Player : BaseObject
 
     public override void Die()
     {
-
+        
     }
 
     private IEnumerator ERotation()
@@ -88,9 +88,5 @@ public class Player : BaseObject
             }
             yield return K.waitPointZeroOne;
         }
-    }
-
-    public override void Shot()
-    {
     }
 }

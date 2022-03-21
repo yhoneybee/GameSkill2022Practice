@@ -5,14 +5,15 @@ using UnityEngine;
 public abstract class BaseObject : MonoBehaviour
 {
     [Header("BaseObject---------------------------------------------------------------------------------------------------------------------------------")]
-    public int MaxHp = 100;
+    public int MaxHp = 10;
     public int Hp
     {
         get => hp;
         set
         {
             if (value > MaxHp) hp = MaxHp;
-            else if (value <= 0) Die();
+            else if (!die && value <= 0)
+                Die();
             else hp = value;
         }
     }
@@ -22,9 +23,12 @@ public abstract class BaseObject : MonoBehaviour
 
     public int damage = 1;
 
-    protected virtual void Start()
+    public bool die;
+
+    protected virtual void OnEnable()
     {
         Hp = MaxHp;
+        die = false;
     }
 
     public void TakeDamage(int damage)
@@ -37,15 +41,15 @@ public abstract class BaseObject : MonoBehaviour
     public virtual void Die()
     {
         //StartCoroutine(EDie());
+        die = true;
         var pool = K.GetPool(ePOOL_TYPE.BoomEffect);
         var obj = pool.Get<ParticleSystem>();
+        obj.transform.localScale = transform.localScale;
 
         pool.WaitReturn(obj.gameObject, 2);
         obj.transform.position = transform.position;
         Destroy(gameObject);
     }
-
-    public abstract void Shot();
 
     private IEnumerator EDie()
     {

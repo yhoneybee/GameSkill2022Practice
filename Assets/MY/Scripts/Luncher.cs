@@ -50,7 +50,7 @@ public class Luncher : MonoBehaviour
     {
         var bullet = K.GetPool(ePOOL_TYPE.Bullet).Get<Bullet>();
         bullet.transform.position = goFirePos.transform.position;
-        bullet.speed = 300;
+        bullet.speed = 1000;
         bullet.damage = K.player.damage;
         bullet.dir = (point - bullet.transform.position).normalized;
         bullet.targetTag = "Enemy";
