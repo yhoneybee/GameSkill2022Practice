@@ -5,19 +5,10 @@ using Cinemachine;
 using UnityEngine.UI;
 using System;
 
-[Serializable]
-public struct LevelInfo
-{
-    public bool[] actives;
-}
-
 public class Player : BaseObject
 {
     [Header("Player---------------------------------------------------------------------------------------------------------------------------------")]
     public GameObject[] goBodies;
-    public RectTransform rtrnAim;
-    public GameObject[] goLunchers;
-    public LevelInfo[] levelInfos;
     public float rateTime;
 
     public int Level
@@ -27,11 +18,6 @@ public class Player : BaseObject
         {
             value %= 5;
             level = value;
-            LevelInfo info = levelInfos[level];
-            for (int i = 0; i < goLunchers.Length; i++)
-            {
-                goLunchers[i].SetActive(info.actives[i]);
-            }
         }
     }
     private int level;
@@ -41,15 +27,10 @@ public class Player : BaseObject
         K.player = this;
     }
 
-    protected override void OnEnable()
+    public override void OnEnable()
     {
         base.OnEnable();
         StartCoroutine(ERotation());
-
-        for (int i = 0; i < goLunchers.Length; i++)
-            goLunchers[i].SetActive(false);
-
-        goLunchers[0].SetActive(true);
     }
 
     void Update()
@@ -57,22 +38,7 @@ public class Player : BaseObject
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
 
-        transform.Translate(moveSpeed * Time.deltaTime * new Vector3(x, z, 0));
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Level++;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-
-    }
-
-    public override void Die()
-    {
-        
+        transform.Translate(moveSpeed * K.DT * new Vector3(x, 0, z));
     }
 
     private IEnumerator ERotation()
@@ -87,6 +53,21 @@ public class Player : BaseObject
                 go.transform.rotation = Quaternion.Lerp(go.transform.rotation, Quaternion.Euler(Vector3.forward * x * 20), Time.deltaTime * 7);
             }
             yield return K.waitPointZeroOne;
+        }
+    }
+
+    public override IEnumerator EShot()
+    {
+        var wait = new WaitForSeconds(rateTime);
+        var pool = K.Pool(ePOOL_TYPE.Bullet);
+        while (true)
+        {
+            var obj = pool.Get<BaseBullet>();
+            obj.transform.position = transform.position;
+            obj.dir = Vector3.forward;
+            obj.moveSpeed = 200;
+            obj.damage = damage;
+            yield return wait;
         }
     }
 }

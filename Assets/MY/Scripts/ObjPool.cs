@@ -4,11 +4,9 @@ using UnityEngine;
 
 public enum ePOOL_TYPE
 {
+    Boom,
     Bullet,
-    BoomEffect,
-    Bacteria,
-    ScoreText,
-    Germ,
+    EnemyBullet,
     End,
 }
 

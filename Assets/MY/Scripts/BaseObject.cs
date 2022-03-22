@@ -5,68 +5,46 @@ using UnityEngine;
 public abstract class BaseObject : MonoBehaviour
 {
     [Header("BaseObject---------------------------------------------------------------------------------------------------------------------------------")]
-    public int MaxHp = 10;
+    public int maxHp = 10;
     public int Hp
     {
         get => hp;
         set
         {
-            if (value > MaxHp) hp = MaxHp;
-            else if (!die && value <= 0)
-                Die();
+            if (value > maxHp) hp = maxHp;
+            else if (value < 0) Die();
             else hp = value;
         }
     }
     public int hp;
 
-    public int moveSpeed = 5;
+    public float moveSpeed = 5;
 
-    public int damage = 1;
+    public int damage = 2;
 
-    public bool die;
+    public bool isPlayer;
 
-    protected virtual void OnEnable()
+    public virtual void OnEnable()
     {
-        Hp = MaxHp;
-        die = false;
+        Hp = maxHp;
+        StartCoroutine(EShot());
     }
 
-    public void TakeDamage(int damage)
+    public void Die()
     {
-        Hp -= damage;
+        var poolObj = K.PoolGet(ePOOL_TYPE.Boom);
+        poolObj.obj.transform.position = transform.position;
+        poolObj.pool.WaitReturn(poolObj.obj, 3);
     }
 
-    public void TakeDamage(BaseObject obj) => TakeDamage(obj.damage);
+    public abstract IEnumerator EShot();
 
-    public virtual void Die()
+    private void OnTriggerEnter(Collider other)
     {
-        //StartCoroutine(EDie());
-        die = true;
-        var pool = K.GetPool(ePOOL_TYPE.BoomEffect);
-        var obj = pool.Get<ParticleSystem>();
-        obj.transform.localScale = transform.localScale;
-
-        pool.WaitReturn(obj.gameObject, 2);
-        obj.transform.position = transform.position;
-        Destroy(gameObject);
-    }
-
-    private IEnumerator EDie()
-    {
-        float time = 0;
-        while (Mathf.Abs(transform.localScale.x - 0) >= 0.01f)
+        var obj = other.GetComponent<BaseBullet>();
+        if (obj && (isPlayer != obj.isShotByPlayer))
         {
-            time += Time.deltaTime;
-
-            transform.Rotate(Vector3.one * (time + 10));
-
-            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 0.1f);
-
-            yield return K.waitPointZeroOne;
+            Hp -= obj.damage;
         }
-
-        Destroy(gameObject);
-
-        yield return null;
     }
 }
