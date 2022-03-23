@@ -4,17 +4,35 @@ using UnityEngine;
 
 public class Bacteria : BaseEnemy
 {
+    public override void ChangeForm()
+    {
+        form = Random.Range(0, 3);
+    }
+
     public override IEnumerator EMove()
     {
-        yield return K.waitPointZeroOne;
+        while (true)
+        {
+            switch (form)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+            }
+            yield return K.waitPointZeroOne;
+        }
     }
 
     public override IEnumerator EShot()
     {
-        var poolObj = K.PoolGet<BaseBullet>(ePOOL_TYPE.EnemyBullet);
-        poolObj.obj.transform.position = transform.position;
-        poolObj.obj.dir = Vector3.back;
-        poolObj.obj.moveSpeed = 100;
         yield return K.waitPointZeroOne;
+        //while (true)
+        //{
+        //    K.Shot(transform.position, Vector3.back, 200, damage, false);
+        //    yield return new WaitForSeconds(1);
+        //}
     }
 }

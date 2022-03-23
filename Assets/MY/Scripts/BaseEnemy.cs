@@ -6,12 +6,27 @@ public abstract class BaseEnemy : BaseObject
 {
     [Header("BaseEnemy---------------------------------------------------------------------------------------------------------------------------------")]
     public SphereCollider sphereCollider;
+    public int form;
+    public float changeFromTime;
+    public float time;
 
-    public override void OnEnable()
+    private void Update()
     {
+        time += Time.deltaTime;
+        if (time > changeFromTime)
+        {
+            time = 0;
+            ChangeForm();
+        }
+    }
+
+    public abstract void ChangeForm();
+
+    public override IEnumerator EOnEnable()
+    {
+        yield return StartCoroutine(base.EOnEnable());
         if (!sphereCollider) sphereCollider = GetComponent<SphereCollider>();
         sphereCollider.radius *= 3;
-        base.OnEnable();
         StartCoroutine(EMove());
     }
     public abstract IEnumerator EMove();

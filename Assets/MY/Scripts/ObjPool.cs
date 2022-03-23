@@ -7,6 +7,10 @@ public enum ePOOL_TYPE
     Boom,
     Bullet,
     EnemyBullet,
+    Coin,
+    Bacteria,
+    Germ,
+    Virus,
     End,
 }
 
@@ -16,14 +20,14 @@ public class ObjPool : MonoBehaviour
 
     public GameObject goOrigin;
 
-    private List<GameObject> objects = new List<GameObject>();
+    private Queue<GameObject> objects = new Queue<GameObject>();
 
     private void Awake()
     {
         K.pools[((int)poolType)] = this;
     }
 
-    public GameObject Get()
+    public GameObject Get(Vector3 pos)
     {
         GameObject obj = null;
 
@@ -33,22 +37,22 @@ public class ObjPool : MonoBehaviour
         }
         else
         {
-            obj = objects[0];
-            objects.RemoveAt(0);
+            obj = objects.Dequeue();
         }
 
-        obj.SetActive(true);
         obj.transform.SetParent(transform);
+        obj.transform.position = pos;
+        obj.SetActive(true);
 
         return obj;
     }
 
-    public T Get<T>() => Get().GetComponent<T>();
+    public T Get<T>(Vector3 pos) => Get(pos).GetComponent<T>();
 
     public void Return(GameObject obj)
     {
+        objects.Enqueue(obj);
         obj.SetActive(false);
-        objects.Add(obj);
     }
 
     public void WaitReturn(GameObject obj, float time)

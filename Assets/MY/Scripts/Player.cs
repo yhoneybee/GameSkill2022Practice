@@ -10,6 +10,7 @@ public class Player : BaseObject
     [Header("Player---------------------------------------------------------------------------------------------------------------------------------")]
     public GameObject[] goBodies;
     public float rateTime;
+    public Vector2 moveRange;
 
     public int Level
     {
@@ -27,9 +28,9 @@ public class Player : BaseObject
         K.player = this;
     }
 
-    public override void OnEnable()
+    public override IEnumerator EOnEnable()
     {
-        base.OnEnable();
+        yield return StartCoroutine(base.EOnEnable());
         StartCoroutine(ERotation());
     }
 
@@ -39,6 +40,8 @@ public class Player : BaseObject
         float z = Input.GetAxisRaw("Vertical");
 
         transform.Translate(moveSpeed * K.DT * new Vector3(x, 0, z));
+
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -moveRange.x, moveRange.x), transform.position.y, Mathf.Clamp(transform.position.z, -moveRange.y, moveRange.y));
     }
 
     private IEnumerator ERotation()
@@ -58,16 +61,10 @@ public class Player : BaseObject
 
     public override IEnumerator EShot()
     {
-        var wait = new WaitForSeconds(rateTime);
-        var pool = K.Pool(ePOOL_TYPE.Bullet);
         while (true)
         {
-            var obj = pool.Get<BaseBullet>();
-            obj.transform.position = transform.position;
-            obj.dir = Vector3.forward;
-            obj.moveSpeed = 200;
-            obj.damage = damage;
-            yield return wait;
+            K.Shot(transform.position, Vector3.forward, 200, damage, true);
+            yield return new WaitForSeconds(rateTime);
         }
     }
 }

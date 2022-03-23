@@ -167,4 +167,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 0
   dir: {x: 0, y: 0, z: 0}
+  damage: 0
   isShotByPlayer: 1
