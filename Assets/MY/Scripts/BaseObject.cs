@@ -16,7 +16,7 @@ public abstract class BaseObject : MonoBehaviour
         {
             if (isNoDamage && value < hp) return;
             if (value > maxHp) hp = maxHp;
-            else if (value < 0) Die();
+            else if (value <= 0) Die();
             else hp = value;
         }
     }
@@ -40,7 +40,7 @@ public abstract class BaseObject : MonoBehaviour
         GetComponent<Rigidbody>().useGravity = false;
     }
 
-    public void Die()
+    public virtual void Die()
     {
         var poolObj = K.PoolGet(ePOOL_TYPE.Boom, transform.position);
         poolObj.pool.WaitReturn(poolObj.obj, 3);

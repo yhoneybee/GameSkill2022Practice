@@ -20,7 +20,7 @@ public class ObjPool : MonoBehaviour
 
     public GameObject goOrigin;
 
-    private Queue<GameObject> objects = new Queue<GameObject>();
+    private Queue<GameObject> readyObjects = new Queue<GameObject>();
 
     private void Awake()
     {
@@ -31,13 +31,17 @@ public class ObjPool : MonoBehaviour
     {
         GameObject obj = null;
 
-        if (objects.Count == 0)
+        if (readyObjects.Count == 0)
         {
             obj = Instantiate(goOrigin);
+            if (obj.CompareTag("Enemy"))
+            {
+                K.enemies.Add(obj.GetComponent<BaseEnemy>());
+            }
         }
         else
         {
-            obj = objects.Dequeue();
+            obj = readyObjects.Dequeue();
         }
 
         obj.transform.SetParent(transform);
@@ -51,7 +55,7 @@ public class ObjPool : MonoBehaviour
 
     public void Return(GameObject obj)
     {
-        objects.Enqueue(obj);
+        readyObjects.Enqueue(obj);
         obj.SetActive(false);
     }
 

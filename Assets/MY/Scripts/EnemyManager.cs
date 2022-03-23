@@ -12,31 +12,48 @@ public enum MoveType
 
 public class EnemyManager : Singletone<EnemyManager>
 {
-    private void Start()
+    public List<Vector3> wayPoints;
+    public SphereCollider origin;
+    public int state;
+
+    public Vector3 GetWayPoint()
     {
+        return wayPoints[Random.Range(0, wayPoints.Count)];
     }
 
-
-
-    public IEnumerator EMove(Transform trn, Vector3 pos, float speed, float loopTime, MoveType moveType)
+    private void Start()
     {
-        float time = 0;
-        while (Vector3.Distance(trn.transform.position, pos) > 0.1f)
+        for (int y = 0; y < 2; y++)
         {
-            time += Time.deltaTime;
-            if (time > loopTime) break;
-            switch (moveType)
+            for (int x = 1; x < 200 / 25; x++)
             {
-                case MoveType.MoveTowards:
-                    trn.position = Vector3.MoveTowards(trn.transform.position, pos, speed * K.DT);
+                wayPoints.Add(new Vector3(-100 + (x * 25), 0, 50 - (y * 25)));
+            }
+        }
+        StartCoroutine(EUpdate());
+    }
+
+    private IEnumerator EUpdate()
+    {
+        while (true)
+        {
+            switch (state)
+            {
+                case 0:
+                    for (int i = 0; i < 5; i++)
+                    {
+                        K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(200, 0, -400));
+                    }
+                    for (int i = 0; i < 5; i++)
+                    {
+                        K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(-200, 0, -400));
+                    }
+                    yield return new WaitForSeconds(20);
                     break;
-                case MoveType.Lerp:
-                    trn.position = Vector3.Lerp(trn.transform.position, pos, speed * K.DT);
-                    break;
-                case MoveType.Slerp:
-                    trn.position = Vector3.Slerp(trn.transform.position, pos, speed * K.DT);
+                case 1:
                     break;
             }
+
             yield return K.waitPointZeroOne;
         }
     }

@@ -10,9 +10,13 @@ public class Coin : MonoBehaviour
     {
         transform.Rotate(Vector3.forward * rotSpeed * K.DT);
         var dis = Vector3.Distance(K.player.transform.position, transform.position);
-        if (dis < 30)
+        if (dis < 15)
         {
-            transform.position = Vector3.Lerp(transform.position, K.player.transform.position, K.DT * (dis / 5));
+            transform.position = Vector3.Lerp(transform.position, K.player.transform.position, K.DT * 3);
+        }
+        else
+        {
+            transform.Translate(Vector3.back * K.DT * 30);
         }
     }
 

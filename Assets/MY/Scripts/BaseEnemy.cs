@@ -9,6 +9,7 @@ public abstract class BaseEnemy : BaseObject
     public int form;
     public float changeFromTime;
     public float time;
+    public int idx;
 
     private void Update()
     {
@@ -30,4 +31,10 @@ public abstract class BaseEnemy : BaseObject
         StartCoroutine(EMove());
     }
     public abstract IEnumerator EMove();
+
+    public override void Die()
+    {
+        K.PoolGet<Coin>(ePOOL_TYPE.Coin, transform.position);
+        base.Die();
+    }
 }

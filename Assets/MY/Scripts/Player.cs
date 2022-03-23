@@ -11,27 +11,32 @@ public class Player : BaseObject
     public GameObject[] goBodies;
     public float rateTime;
     public Vector2 moveRange;
+    public int exp;
+    public float edonsSpeed;
+    public List<Edon> edons = new List<Edon>();
 
-    public int Level
+    public int UpgradeLevel
     {
-        get => level;
+        get => upgradeLevel;
         set
         {
             value %= 5;
-            level = value;
+            upgradeLevel = value;
         }
     }
-    private int level;
+    private int upgradeLevel;
 
     private void Awake()
     {
         K.player = this;
+        EdonsPosReset();
     }
 
     public override IEnumerator EOnEnable()
     {
         yield return StartCoroutine(base.EOnEnable());
         StartCoroutine(ERotation());
+        StartCoroutine(ECharge());
     }
 
     void Update()
@@ -65,6 +70,33 @@ public class Player : BaseObject
         {
             K.Shot(transform.position, Vector3.forward, 200, damage, true);
             yield return new WaitForSeconds(rateTime);
+        }
+    }
+
+    private IEnumerator ECharge()
+    {
+        float time = 0;
+        while (true)
+        {
+            if (Input.GetButton("Fire1"))
+            {
+                time += Time.deltaTime;
+            }
+            else
+            {
+
+                time = 0;
+            }
+
+            yield return K.waitPointZeroOne;
+        }
+    }
+
+    public void EdonsPosReset()
+    {
+        for (int i = 0; i < edons.Count; i++)
+        {
+            edons[i].i = 360 / edons.Count * i;
         }
     }
 }

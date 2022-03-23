@@ -8,6 +8,7 @@ public static class K
     public static WaitForSeconds waitPointZeroOne = new WaitForSeconds(0.01f);
     public static WaitForSeconds waitDT = new WaitForSeconds(DT);
     public static ObjPool[] pools = new ObjPool[((int)ePOOL_TYPE.End)];
+    public static List<BaseEnemy> enemies = new List<BaseEnemy>();
 
     public static ObjPool Pool(ePOOL_TYPE type) => pools[((int)type)];
 
@@ -24,6 +25,7 @@ public static class K
         pool.obj.moveSpeed = speed;
         pool.obj.damage = damage;
         pool.obj.isShotByPlayer = isShotByPlayer;
+        pool.obj.GetComponent<TrailRenderer>().Clear();
 
         return (pool.pool, pool.obj.gameObject);
     }
@@ -32,5 +34,28 @@ public static class K
     {
         var pool = Shot(spawnPos, dir, speed, damage, isShotByPlayer);
         return (pool.pool, pool.obj.GetComponent<T>());
+    }
+
+    public static IEnumerator EMove(Transform trn, Vector3 pos, float speed, float loopTime, MoveType moveType)
+    {
+        float time = 0;
+        while (Vector3.Distance(trn.transform.position, pos) > 0.1f)
+        {
+            time += Time.deltaTime;
+            if (time > loopTime) break;
+            switch (moveType)
+            {
+                case MoveType.MoveTowards:
+                    trn.position = Vector3.MoveTowards(trn.transform.position, pos, speed * DT);
+                    break;
+                case MoveType.Lerp:
+                    trn.position = Vector3.Lerp(trn.transform.position, pos, speed * DT);
+                    break;
+                case MoveType.Slerp:
+                    trn.position = Vector3.Slerp(trn.transform.position, pos, speed * DT);
+                    break;
+            }
+            yield return waitPointZeroOne;
+        }
     }
 }
