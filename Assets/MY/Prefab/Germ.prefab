@@ -137,7 +137,7 @@ MonoBehaviour:
   form: 0
   changeFromTime: 0
   time: 0
-  score: 0
+  score: 2000
   origin: {x: 0, y: 0, z: 0}
   rotateSpeed: 0
   i: 0

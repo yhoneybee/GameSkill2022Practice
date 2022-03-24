@@ -16,8 +16,10 @@ public class Player : BaseObject
     public int edonsCount;
     public List<Edon> edons = new List<Edon>();
     public PlayerBulletInfo playerBulletInfo;
-    public bool isCharge;
     public float[] theta = { 115, 85, 72 };
+    public float chargingSpeed;
+    public float chargeLifeTime;
+    int[] charges = { 0, 3, 5, 8 };
 
     private void Awake()
     {
@@ -90,17 +92,25 @@ public class Player : BaseObject
                 {
                     i += theta[theta.Length - 1];
                 }
-                pos = K.Cricle(i, 15, transform.position);
-                var pool = K.Shot(pos, (transform.position - pos).normalized, 30, 0, true);
-                pool.pool.WaitReturn(pool.obj, 1);
+                if (time >= 1)
+                {
+                    pos = K.Cricle(i, 15, transform.position);
+                    var pool = K.Shot(pos, (transform.position - pos).normalized, chargingSpeed * Time.deltaTime, 0, true);
+                    pool.pool.WaitReturn(pool.obj, chargeLifeTime);
+                }
             }
             else if (Input.GetButtonUp("Fire1"))
             {
-                if (time >= theta.Length - 1)
+                for (int j = theta.Length - 1; j >= 0; j--)
                 {
-                    StartCoroutine(K.EBezierShot(transform, damage));
-                    time = 0;
+                    if (time >= j)
+                    {
+                        StartCoroutine(K.EBezierShot(transform, damage, charges[j]));
+                        break;
+                    }
                 }
+
+                time = 0;
             }
 
             yield return null;

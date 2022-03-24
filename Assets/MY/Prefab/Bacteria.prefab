@@ -121,7 +121,7 @@ MonoBehaviour:
   form: 0
   changeFromTime: 5
   time: 0
-  score: 100
+  score: 500
 --- !u!54 &2051309665867313986
 Rigidbody:
   m_ObjectHideFlags: 0

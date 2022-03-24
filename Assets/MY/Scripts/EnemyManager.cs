@@ -37,7 +37,7 @@ public class EnemyManager : Singletone<EnemyManager>
     {
         while (true)
         {
-            state = 1;
+            state = Random.Range(0, 2);
             switch (state)
             {
                 case 0:
@@ -65,7 +65,6 @@ public class EnemyManager : Singletone<EnemyManager>
                     yield return new WaitForSeconds(30);
                     break;
             }
-            state = Random.Range(0, 3);
             yield return K.waitPointZeroOne;
         }
     }

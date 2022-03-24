@@ -27,6 +27,7 @@ public class BaseBullet : MonoBehaviour
     {
         if (Vector3.Distance(K.player.transform.position, transform.position) > 300)
         {
+            dir = Vector3.zero;
             K.Pool(poolType).Return(gameObject);
         }
     }
@@ -52,7 +53,7 @@ public class BaseBullet : MonoBehaviour
         {
             transform.Translate(dir * (isShotByPlayer ? Time.deltaTime : K.DT) * moveSpeed);
 
-            yield return K.waitPointZeroOne;
+            yield return null;
         }
     }
 }

@@ -220,7 +220,7 @@ MonoBehaviour:
   moveSpeed: 50
   damage: 2
   isPlayer: 1
-  isNoDamage: 1
+  isNoDamage: 0
   goBodies:
   - {fileID: 1135915470}
   - {fileID: 1040951871}
@@ -236,7 +236,13 @@ MonoBehaviour:
   - {fileID: 1013104532}
   - {fileID: 1475406554}
   playerBulletInfo: {fileID: 76458358}
-  isCharge: 0
+  theta:
+  - 0
+  - 118.1
+  - 70.1
+  - 43.6
+  chargingSpeed: 1500
+  chargeLifeTime: 0.3
 --- !u!95 &76458355
 Animator:
   serializedVersion: 3
@@ -303,7 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f8d7526c20ecf4d8561ae3b2a2c582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  multi: 2
+  multi: 1
   throughCount: 0
   upgradeLevel: 0
 --- !u!1 &141737700
