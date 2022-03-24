@@ -10,7 +10,6 @@ public class Singletone<T> : MonoBehaviour
     private void Awake()
     {
         Instance = GetComponent<T>();
-        DontDestroyOnLoad(gameObject);
     }
 
     private void OnDestroy()

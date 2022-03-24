@@ -7,8 +7,16 @@ public abstract class BaseObject : MonoBehaviour
 {
     [Header("BaseObject---------------------------------------------------------------------------------------------------------------------------------")]
     public ePOOL_TYPE objType;
-
-    public int maxHp = 20;
+    public int MaxHp
+    {
+        get => maxHp;
+        set
+        {
+            maxHp = value;
+            Hp = value;
+        }
+    }
+    public int maxHp;
     public int Hp
     {
         get => hp;
@@ -62,7 +70,15 @@ public abstract class BaseObject : MonoBehaviour
         if (obj && (isPlayer != obj.isShotByPlayer))
         {
             Hp -= obj.damage;
-            K.Pool((obj.isShotByPlayer ? ePOOL_TYPE.Bullet : ePOOL_TYPE.EnemyBullet)).Return(obj.gameObject);
+            if (obj.throughCount > 0)
+            {
+                obj.throughCount--;
+                if (obj.damage > 0) obj.damage--;
+            }
+            else
+            {
+                K.Pool(obj.poolType).Return(obj.gameObject);
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ public enum ePOOL_TYPE
     Bacteria,
     Germ,
     Virus,
+    Bezier,
     End,
 }
 
@@ -55,8 +56,8 @@ public class ObjPool : MonoBehaviour
 
     public void Return(GameObject obj)
     {
-        readyObjects.Enqueue(obj);
         obj.SetActive(false);
+        readyObjects.Enqueue(obj);
     }
 
     public void WaitReturn(GameObject obj, float time)

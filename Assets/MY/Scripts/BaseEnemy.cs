@@ -9,7 +9,7 @@ public abstract class BaseEnemy : BaseObject
     public int form;
     public float changeFromTime;
     public float time;
-    public int idx;
+    public int score;
 
     private void Update()
     {
@@ -21,13 +21,21 @@ public abstract class BaseEnemy : BaseObject
         }
     }
 
+    private void FixedUpdate()
+    {
+        //if (transform.position.z < K.player.transform.position.z - 10)
+        //{
+        //    base.Die();
+        //}
+    }
+
     public abstract void ChangeForm();
 
     public override IEnumerator EOnEnable()
     {
         yield return StartCoroutine(base.EOnEnable());
         if (!sphereCollider) sphereCollider = GetComponent<SphereCollider>();
-        sphereCollider.radius *= 3;
+        sphereCollider.radius *= 2;
         StartCoroutine(EMove());
     }
     public abstract IEnumerator EMove();
@@ -35,6 +43,7 @@ public abstract class BaseEnemy : BaseObject
     public override void Die()
     {
         K.PoolGet<Coin>(ePOOL_TYPE.Coin, transform.position);
+        GameManager.Instance.score += score;
         base.Die();
     }
 }

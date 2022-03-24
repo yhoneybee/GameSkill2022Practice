@@ -5,25 +5,48 @@ using UnityEngine;
 public class BaseBullet : MonoBehaviour
 {
     [Header("BaseBullet---------------------------------------------------------------------------------------------------------------------------------")]
+    public ePOOL_TYPE poolType;
     public float moveSpeed;
     public Vector3 dir;
     public int damage;
     public bool isShotByPlayer;
+    public int throughCount;
+
+    public bool isSpeedIncrease;
+    public float increaseSpeed;
+    public float saveSpeed;
 
     public virtual void OnEnable()
     {
+        saveSpeed = moveSpeed;
         StartCoroutine(EMove());
+        if (isSpeedIncrease) StartCoroutine(EIncrease());
     }
 
     private void FixedUpdate()
     {
         if (Vector3.Distance(K.player.transform.position, transform.position) > 300)
         {
-            K.Pool((isShotByPlayer ? ePOOL_TYPE.Bullet : ePOOL_TYPE.EnemyBullet)).Return(gameObject);
+            K.Pool(poolType).Return(gameObject);
         }
     }
 
-    private IEnumerator EMove()
+    public IEnumerator EIncrease()
+    {
+        while (Mathf.Abs(moveSpeed - 0) >= 0.5f)
+        {
+            moveSpeed = Mathf.Lerp(moveSpeed, 0, Time.deltaTime * increaseSpeed);
+            yield return K.waitPointZeroOne;
+        }
+
+        while (Mathf.Abs(moveSpeed - saveSpeed * 2) >= 0.5f)
+        {
+            moveSpeed = Mathf.Lerp(moveSpeed, saveSpeed * 2, Time.deltaTime * increaseSpeed * 2);
+            yield return K.waitPointZeroOne;
+        }
+    }
+
+    public virtual IEnumerator EMove()
     {
         while (true)
         {

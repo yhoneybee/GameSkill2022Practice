@@ -74,10 +74,10 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.1
+  m_Time: 0.2
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 1.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -148,7 +148,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2640020815835957321}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1
@@ -165,7 +165,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2786a9b54b0a72e48bb304d255274c6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolType: 1
   moveSpeed: 0
   dir: {x: 0, y: 0, z: 0}
   damage: 0
   isShotByPlayer: 1
+  throughCount: 0

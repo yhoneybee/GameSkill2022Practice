@@ -37,23 +37,35 @@ public class EnemyManager : Singletone<EnemyManager>
     {
         while (true)
         {
+            state = 1;
             switch (state)
             {
                 case 0:
                     for (int i = 0; i < 5; i++)
                     {
-                        K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(200, 0, -400));
+                        K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(200, 0, -400)).obj.MaxHp = 4;
                     }
                     for (int i = 0; i < 5; i++)
                     {
-                        K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(-200, 0, -400));
+                        K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(-200, 0, -400)).obj.MaxHp = 4;
                     }
                     yield return new WaitForSeconds(20);
                     break;
                 case 1:
+                    for (int i = 0; i < 360; i += 30)
+                    {
+                        var pool = K.PoolGet<Germ>(ePOOL_TYPE.Germ, new Vector3(95, 0, 50));
+                        pool.obj.origin = new Vector3(95, 0, 50);
+                        pool.obj.i = i;
+                        pool.obj.rotateSpeed = 0.5f;
+                        pool.obj.radius = 60;
+                        pool.obj.MaxHp = 8;
+                        yield return K.waitPointZeroOne;
+                    }
+                    yield return new WaitForSeconds(30);
                     break;
             }
-
+            state = Random.Range(0, 3);
             yield return K.waitPointZeroOne;
         }
     }

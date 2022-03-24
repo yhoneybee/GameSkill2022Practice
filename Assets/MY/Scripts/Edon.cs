@@ -10,6 +10,16 @@ public class Edon : MonoBehaviour
     private void Start()
     {
         StartCoroutine(ERotation());
+        StartCoroutine(EShot());
+    }
+
+    IEnumerator EShot()
+    {
+        while (true)
+        {
+            yield return StartCoroutine(K.EBezierShot(transform, player.damage / 2, 1, true));
+            yield return new WaitForSeconds(1);
+        }
     }
 
     IEnumerator ERotation()
@@ -17,7 +27,7 @@ public class Edon : MonoBehaviour
         Vector3 pos = Vector3.zero;
         while (true)
         {
-            pos = player.transform.localPosition + new Vector3(Mathf.Cos(i * Mathf.Deg2Rad), 0, Mathf.Sin(i * Mathf.Deg2Rad)) * 20;
+            pos = K.Cricle(i, 15, player.transform.position);
 
             transform.localPosition = pos;
 
