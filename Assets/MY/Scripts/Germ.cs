@@ -9,17 +9,26 @@ public class Germ : BaseEnemy
     public float rotateSpeed;
     public float i;
     public float radius;
-
-    public override void ChangeForm()
-    {
-    }
+    public bool isChangeRadius;
 
     public override IEnumerator EMove()
     {
         Vector3 pos = Vector3.zero;
+        Vector3 originPos = Vector3.forward * 100;
+        float time = 0;
         while (true)
         {
-            pos = K.Cricle(i, radius, origin);
+            time += Time.deltaTime;
+
+            if (isChangeRadius)
+            {
+                radius += Mathf.Sin(time * 3);
+                radius = Mathf.Clamp(radius, -60, 60);
+            }
+
+            originPos = Vector3.Lerp(originPos, origin, K.DT * 3);
+
+            pos = K.Cricle(i, radius, originPos);
 
             transform.position = pos;
 
@@ -45,6 +54,8 @@ public class Germ : BaseEnemy
         //}
 
         var wait = new WaitForSeconds(2);
+
+        yield return wait;
 
         while (true)
         {

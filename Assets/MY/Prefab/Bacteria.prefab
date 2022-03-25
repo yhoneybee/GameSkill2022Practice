@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5069955810635052251}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.892471, y: 95.89365, z: -40.1602}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 1850292033070518258}
@@ -117,11 +117,10 @@ MonoBehaviour:
   damage: 2
   isPlayer: 0
   isNoDamage: 0
+  noDamageTime: 0
+  noDamageDeltaTime: 0
   sphereCollider: {fileID: 0}
-  form: 0
-  changeFromTime: 5
-  time: 0
-  score: 500
+  score: 6322
 --- !u!54 &2051309665867313986
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -209,7 +208,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2903990374067445579, guid: 5f0477e2a2d18cd448283a96b470baad, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5f0477e2a2d18cd448283a96b470baad, type: 3}
 --- !u!4 &1850292033070518258 stripped
 Transform:

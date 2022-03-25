@@ -36,13 +36,13 @@ public class BaseBullet : MonoBehaviour
     {
         while (Mathf.Abs(moveSpeed - 0) >= 0.5f)
         {
-            moveSpeed = Mathf.Lerp(moveSpeed, 0, Time.deltaTime * increaseSpeed);
+            moveSpeed = Mathf.Lerp(moveSpeed, 0, K.DT * increaseSpeed);
             yield return K.waitPointZeroOne;
         }
 
         while (Mathf.Abs(moveSpeed - saveSpeed * 2) >= 0.5f)
         {
-            moveSpeed = Mathf.Lerp(moveSpeed, saveSpeed * 2, Time.deltaTime * increaseSpeed * 2);
+            moveSpeed = Mathf.Lerp(moveSpeed, saveSpeed * 2, K.DT * increaseSpeed * 2);
             yield return K.waitPointZeroOne;
         }
     }
@@ -51,7 +51,7 @@ public class BaseBullet : MonoBehaviour
     {
         while (true)
         {
-            transform.Translate(dir * (isShotByPlayer ? Time.deltaTime : K.DT) * moveSpeed);
+            transform.Translate(dir * K.DT * moveSpeed);
 
             yield return null;
         }

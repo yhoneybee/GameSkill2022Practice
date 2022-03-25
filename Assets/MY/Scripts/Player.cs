@@ -19,11 +19,14 @@ public class Player : BaseObject
     public float[] theta = { 115, 85, 72 };
     public float chargingSpeed;
     public float chargeLifeTime;
+    public Material matPlayer;
+
     int[] charges = { 0, 3, 5, 8 };
 
     private void Awake()
     {
         K.player = this;
+        matPlayer.color = Color.white;
     }
 
     public override IEnumerator EOnEnable()
@@ -67,8 +70,9 @@ public class Player : BaseObject
     {
         while (true)
         {
-            yield return StartCoroutine(playerBulletInfo.EShot(damage));
             yield return new WaitForSeconds(rateTime);
+            if (K.DT <= 0) continue;
+            yield return StartCoroutine(playerBulletInfo.EShot(damage));
         }
     }
 
@@ -80,7 +84,7 @@ public class Player : BaseObject
 
         while (true)
         {
-            if (Input.GetButton("Fire1"))
+            if (K.DT > 0 && Input.GetButton("Fire1"))
             {
                 time += Time.deltaTime;
                 //i += 15 * (int)time + 10;
@@ -95,7 +99,7 @@ public class Player : BaseObject
                 if (time >= 1)
                 {
                     pos = K.Cricle(i, 15, transform.position);
-                    var pool = K.Shot(pos, (transform.position - pos).normalized, chargingSpeed * Time.deltaTime, 0, true);
+                    var pool = K.Effect(pos, (transform.position - pos).normalized, chargingSpeed * Time.deltaTime);
                     pool.pool.WaitReturn(pool.obj, chargeLifeTime);
                 }
             }

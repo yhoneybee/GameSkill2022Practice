@@ -4,21 +4,16 @@ using UnityEngine;
 
 public class Bacteria : BaseEnemy
 {
-    Vector3 axis;
-
-    public override void ChangeForm()
-    {
-        //form = Random.Range(0, 2);
-        //axis = (Random.Range(0, 2) == 0 ? Vector3.up : Vector3.down);
-    }
-
     public override IEnumerator EMove()
     {
-        yield return StartCoroutine(K.EMove(transform, new Vector3(Random.Range(-70.0f, 70.0f), 0, Random.Range(20.0f, 30.0f)), 2, 5, MoveType.Slerp));
+        yield return StartCoroutine(K.EMove(transform, new Vector3(Random.Range(-70.0f, 70.0f), 0, Random.Range(25.0f, 30.0f)), 2, 5, MoveType.Slerp));
         //yield return StartCoroutine(K.EKeepDistance(transform, Vector3.forward * 25, 30, 10 * Time.deltaTime));
+
+        float time = Random.Range(0, 180);
 
         while (true)
         {
+            time += Time.deltaTime;
             //switch (form)
             //{
             //    case 0:
@@ -29,7 +24,7 @@ public class Bacteria : BaseEnemy
             //        transform.Translate(Vector3.back * moveSpeed * K.DT);
             //        break;
             //}
-            //transform.Translate(Vector3.back * moveSpeed * K.DT);
+            transform.Translate(Vector3.back * moveSpeed * K.DT * (((Mathf.Sin(time) + 1) / 2) + 1));
             yield return K.waitPointZeroOne;
         }
     }

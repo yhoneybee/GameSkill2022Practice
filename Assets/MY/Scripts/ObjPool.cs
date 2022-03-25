@@ -12,6 +12,7 @@ public enum ePOOL_TYPE
     Germ,
     Virus,
     Bezier,
+    Effect,
     End,
 }
 

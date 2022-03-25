@@ -10,10 +10,11 @@ public static class K
     public static WaitForSeconds waitDT = new WaitForSeconds(DT);
     public static ObjPool[] pools = new ObjPool[((int)ePOOL_TYPE.End)];
     public static List<BaseEnemy> enemies = new List<BaseEnemy>();
+    public static CameraMove camera;
 
-    public static BaseEnemy GetNearEnemy()
+    public static BaseEnemy GetNearEnemy(Transform trn)
     {
-        return enemies.FindAll(x => x.gameObject.activeSelf).OrderBy(x => Vector3.Distance(player.transform.position, x.transform.position)).FirstOrDefault();
+        return enemies.FindAll(x => x.gameObject.activeSelf).OrderBy(x => Vector3.Distance(trn.position, x.transform.position)).FirstOrDefault();
     }
 
     public static ObjPool Pool(ePOOL_TYPE type) => pools[((int)type)];
@@ -41,6 +42,18 @@ public static class K
     {
         var pool = Shot(spawnPos, dir, speed, damage, isShotByPlayer, throughCount);
         return (pool.pool, pool.obj.GetComponent<T>());
+    }
+
+    public static (ObjPool pool, GameObject obj) Effect(Vector3 spawnPos, Vector3 dir, float speed)
+    {
+        var pool = PoolGet<BaseBullet>(ePOOL_TYPE.Effect, spawnPos);
+        pool.obj.dir = dir;
+        pool.obj.moveSpeed = speed;
+        pool.obj.damage = 0;
+        pool.obj.isShotByPlayer = true;
+        pool.obj.GetComponent<TrailRenderer>().Clear();
+
+        return (pool.pool, pool.obj.gameObject);
     }
 
     public static IEnumerator EMove(Transform trn, Vector3 pos, float speed, float loopTime, MoveType moveType)
@@ -103,20 +116,29 @@ public static class K
                 pool.obj.GetComponent<TrailRenderer>().Clear();
                 pool.obj.moveSpeed = 200;
                 pool.obj.damage = damage;
-                pool.obj.Init(spawner, GetNearEnemy().transform, 9, 6);
+                pool.obj.Init(spawner, GetNearEnemy(player.transform).transform, 9, 6);
                 if (onlyOnce) break;
             }
             yield return wait;
         }
     }
 
+    public static Vector3 Cricle(float x, float y, float radius)
+    {
+        return new Vector3(Mathf.Cos(x * Mathf.Deg2Rad), 0, Mathf.Sin(y * Mathf.Deg2Rad)) * radius;
+    }
+    public static Vector3 Cricle(float x, float y, float radius, Vector3 origin)
+    {
+        return Cricle(x, y, radius) + origin;
+    }
+
     public static Vector3 Cricle(float i, float radius)
     {
-        return new Vector3(Mathf.Cos(i * Mathf.Deg2Rad), 0, Mathf.Sin(i * Mathf.Deg2Rad)) * radius;
+        return Cricle(i, i, radius);
     }
 
     public static Vector3 Cricle(float i, float radius, Vector3 origin)
     {
-        return origin + new Vector3(Mathf.Cos(i * Mathf.Deg2Rad), 0, Mathf.Sin(i * Mathf.Deg2Rad)) * radius;
+        return Cricle(i, i, radius, origin);
     }
 }

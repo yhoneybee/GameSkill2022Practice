@@ -22,10 +22,17 @@ public abstract class BaseObject : MonoBehaviour
         get => hp;
         set
         {
-            if (isNoDamage && value < hp) return;
+            if (value < hp)
+            {
+                if (isNoDamage) return;
+                NoDamageTime = 1.5f;
+            }
             if (value > maxHp) hp = maxHp;
-            else if (value <= 0) Die();
-            else hp = value;
+            else
+            {
+                hp = value;
+                if (hp <= 0) Die();
+            }
         }
     }
     public int hp;
@@ -38,6 +45,22 @@ public abstract class BaseObject : MonoBehaviour
 
     public bool isNoDamage;
 
+    public float NoDamageTime
+    {
+        get => noDamageTime;
+        set
+        {
+            noDamageDeltaTime = 0;
+            noDamageTime = value - 0.5f;
+        }
+    }
+
+    public float noDamageTime;
+
+    public float noDamageDeltaTime;
+
+    public SphereCollider sphereCollider;
+
     public void OnEnable()
     {
         StartCoroutine(EOnEnable());
@@ -48,10 +71,13 @@ public abstract class BaseObject : MonoBehaviour
         GetComponent<Rigidbody>().useGravity = false;
     }
 
-    public virtual void Die()
+    public virtual void Die(bool isBoom = true)
     {
-        var poolObj = K.PoolGet(ePOOL_TYPE.Boom, transform.position);
-        poolObj.pool.WaitReturn(poolObj.obj, 3);
+        if (isBoom)
+        {
+            var poolObj = K.PoolGet(ePOOL_TYPE.Boom, transform.position);
+            poolObj.pool.WaitReturn(poolObj.obj, 3);
+        }
         K.Pool(objType).Return(gameObject);
     }
 
@@ -59,25 +85,63 @@ public abstract class BaseObject : MonoBehaviour
     {
         yield return null;
         Hp = maxHp;
+        if (!sphereCollider) sphereCollider = GetComponent<SphereCollider>();
         StartCoroutine(EShot());
+        if (isPlayer) StartCoroutine(ENoDamageAlpha());
     }
 
     public abstract IEnumerator EShot();
 
-    private void OnTriggerEnter(Collider other)
+    public IEnumerator ENoDamageAlpha()
     {
-        var obj = other.GetComponent<BaseBullet>();
-        if (obj && (isPlayer != obj.isShotByPlayer))
+        var mat = K.player.matPlayer;
+
+        while (true)
         {
-            Hp -= obj.damage;
-            if (obj.throughCount > 0)
+            if (noDamageDeltaTime <= noDamageTime)
             {
-                obj.throughCount--;
-                if (obj.damage > 0) obj.damage--;
+                isNoDamage = true;
+
+                noDamageDeltaTime += Time.deltaTime;
+
+                mat.color = new Color(1, 1, 1, (Mathf.Sin(noDamageDeltaTime * 25) + 1) / 2);
             }
             else
             {
-                K.Pool(obj.poolType).Return(obj.gameObject);
+                mat.color = Color.white;
+
+                if (isNoDamage) yield return new WaitForSeconds(0.5f);
+
+                isNoDamage = false;
+            }
+            yield return null;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        var bullet = other.GetComponent<BaseBullet>();
+        if (bullet)
+        {
+            if (isPlayer == bullet.isShotByPlayer) return;
+            Hp -= bullet.damage;
+            if (bullet.throughCount > 0)
+            {
+                bullet.throughCount--;
+                if (bullet.damage > 0) bullet.damage--;
+            }
+            else
+            {
+                K.Pool(bullet.poolType).Return(bullet.gameObject);
+            }
+        }
+        else
+        {
+            var obj = other.GetComponent<BaseEnemy>();
+
+            if (obj && isPlayer)
+            {
+                Hp -= obj.damage / 2;
             }
         }
     }

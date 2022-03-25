@@ -12,24 +12,11 @@ public enum MoveType
 
 public class EnemyManager : Singletone<EnemyManager>
 {
-    public List<Vector3> wayPoints;
     public SphereCollider origin;
     public int state;
 
-    public Vector3 GetWayPoint()
-    {
-        return wayPoints[Random.Range(0, wayPoints.Count)];
-    }
-
     private void Start()
     {
-        for (int y = 0; y < 2; y++)
-        {
-            for (int x = 1; x < 200 / 25; x++)
-            {
-                wayPoints.Add(new Vector3(-100 + (x * 25), 0, 50 - (y * 25)));
-            }
-        }
         StartCoroutine(EUpdate());
     }
 
@@ -37,35 +24,57 @@ public class EnemyManager : Singletone<EnemyManager>
     {
         while (true)
         {
-            state = Random.Range(0, 2);
-            switch (state)
+            switch (GameManager.Instance.stage)
             {
-                case 0:
-                    for (int i = 0; i < 5; i++)
-                    {
-                        K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(200, 0, -400)).obj.MaxHp = 4;
-                    }
-                    for (int i = 0; i < 5; i++)
-                    {
-                        K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(-200, 0, -400)).obj.MaxHp = 4;
-                    }
-                    yield return new WaitForSeconds(20);
-                    break;
                 case 1:
-                    for (int i = 0; i < 360; i += 30)
-                    {
-                        var pool = K.PoolGet<Germ>(ePOOL_TYPE.Germ, new Vector3(95, 0, 50));
-                        pool.obj.origin = new Vector3(95, 0, 50);
-                        pool.obj.i = i;
-                        pool.obj.rotateSpeed = 0.5f;
-                        pool.obj.radius = 60;
-                        pool.obj.MaxHp = 8;
-                        yield return K.waitPointZeroOne;
-                    }
-                    yield return new WaitForSeconds(30);
+                    Stage1();
                     break;
             }
-            yield return K.waitPointZeroOne;
+            yield return new WaitForSeconds(20);
+        }
+    }
+
+    private void Stage1()
+    {
+        state = Random.Range(0, 3);
+        switch (state)
+        {
+            case 0:
+                SpawnBacterias();
+                break;
+            case 1:
+                SpawnGerms();
+                break;
+            case 2:
+
+                break;
+        }
+    }
+
+    private static void SpawnGerms(bool isChangeRadius = false)
+    {
+        float x = Random.Range(-100, 100);
+        for (int i = 0; i < 360; i += 30)
+        {
+            var pool = K.PoolGet<Germ>(ePOOL_TYPE.Germ, new Vector3(x, 0, 50));
+            pool.obj.origin = new Vector3(x, 0, 50);
+            pool.obj.i = i;
+            pool.obj.rotateSpeed = 0.5f;
+            pool.obj.radius = 60;
+            pool.obj.MaxHp = 8 * GameManager.Instance.Level;
+            pool.obj.isChangeRadius = isChangeRadius;
+        }
+    }
+
+    private void SpawnBacterias()
+    {
+        for (int i = 0; i < Random.Range(5, 10) * GameManager.Instance.stage; i++)
+        {
+            K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(200, 0, 400)).obj.MaxHp = 4 * GameManager.Instance.Level;
+        }
+        for (int i = 0; i < Random.Range(5, 10) * GameManager.Instance.stage; i++)
+        {
+            K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(-200, 0, 400)).obj.MaxHp = 4 * GameManager.Instance.Level;
         }
     }
 }

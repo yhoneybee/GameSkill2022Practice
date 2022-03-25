@@ -5,45 +5,29 @@ using UnityEngine;
 public abstract class BaseEnemy : BaseObject
 {
     [Header("BaseEnemy---------------------------------------------------------------------------------------------------------------------------------")]
-    public SphereCollider sphereCollider;
-    public int form;
-    public float changeFromTime;
-    public float time;
     public int score;
-
-    private void Update()
-    {
-        time += Time.deltaTime;
-        if (time > changeFromTime)
-        {
-            time = 0;
-            ChangeForm();
-        }
-    }
 
     private void FixedUpdate()
     {
-        //if (transform.position.z < K.player.transform.position.z - 10)
-        //{
-        //    base.Die();
-        //}
+        if ((-95 <= transform.position.x && transform.position.x <= 95) && transform.position.z < -60)
+        {
+            base.Die(false);
+            GameManager.Instance.Pain++;
+        }
     }
-
-    public abstract void ChangeForm();
 
     public override IEnumerator EOnEnable()
     {
         yield return StartCoroutine(base.EOnEnable());
-        if (!sphereCollider) sphereCollider = GetComponent<SphereCollider>();
-        sphereCollider.radius *= 2;
+        sphereCollider.radius = 1;
         StartCoroutine(EMove());
     }
     public abstract IEnumerator EMove();
 
-    public override void Die()
+    public override void Die(bool isBoom)
     {
         K.PoolGet<Coin>(ePOOL_TYPE.Coin, transform.position);
         GameManager.Instance.score += score;
-        base.Die();
+        base.Die(isBoom);
     }
 }

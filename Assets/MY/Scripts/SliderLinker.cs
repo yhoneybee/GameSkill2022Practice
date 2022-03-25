@@ -34,7 +34,7 @@ public class SliderLinker : MonoBehaviour
     public string perfix;
     public bool startZero;
 
-    private void Start()
+    private void Awake()
     {
         MaxValue = maxValue;
 

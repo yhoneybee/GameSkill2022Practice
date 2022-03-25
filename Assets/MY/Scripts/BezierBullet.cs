@@ -40,7 +40,7 @@ public class BezierBullet : BaseBullet
         if (!isInit) return;
         if (!target.gameObject.activeSelf)
         {
-            if (!K.GetNearEnemy())
+            if (!K.GetNearEnemy(K.player.transform))
             {
                 K.Pool(poolType).Return(gameObject);
             }
