@@ -13,19 +13,28 @@ public class BaseBullet : MonoBehaviour
     public int throughCount;
 
     public bool isSpeedIncrease;
+    public bool IsSpeedIncrease
+    {
+        get => isSpeedIncrease;
+        set
+        {
+            isSpeedIncrease = value;
+            if (isSpeedIncrease) StartCoroutine(EIncrease());
+        }
+    }
     public float increaseSpeed;
     public float saveSpeed;
 
     public virtual void OnEnable()
     {
         saveSpeed = moveSpeed;
+        throughCount = K.throughCount;
         StartCoroutine(EMove());
-        if (isSpeedIncrease) StartCoroutine(EIncrease());
     }
 
     private void FixedUpdate()
     {
-        if (Vector3.Distance(K.player.transform.position, transform.position) > 300)
+        if (Vector3.Distance(K.player.transform.position, transform.position) > 100)
         {
             dir = Vector3.zero;
             K.Pool(poolType).Return(gameObject);

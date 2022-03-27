@@ -26,7 +26,7 @@ public class ObjPool : MonoBehaviour
 
     private void Awake()
     {
-        K.pools[((int)poolType)] = this;
+        if (!poolType.Equals(ePOOL_TYPE.End)) K.pools[((int)poolType)] = this;
     }
 
     public GameObject Get(Vector3 pos)

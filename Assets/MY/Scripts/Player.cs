@@ -45,10 +45,10 @@ public class Player : BaseObject
 
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -moveRange.x, moveRange.x), transform.position.y, Mathf.Clamp(transform.position.z, -moveRange.y, moveRange.y));
 
-        if (Input.GetKeyDown(KeyCode.RightShift))
-        {
-            EdonsPosReset(++edonsCount);
-        }
+        //if (Input.GetKeyDown(KeyCode.RightShift))
+        //{
+        //    EdonsPosReset(++edonsCount);
+        //}
     }
 
     private IEnumerator ERotation()
@@ -72,7 +72,7 @@ public class Player : BaseObject
         {
             yield return new WaitForSeconds(rateTime);
             if (K.DT <= 0) continue;
-            yield return StartCoroutine(playerBulletInfo.EShot(damage));
+            yield return StartCoroutine(playerBulletInfo.EShot(damage + K.playerDamage));
         }
     }
 
@@ -109,7 +109,7 @@ public class Player : BaseObject
                 {
                     if (time >= j)
                     {
-                        StartCoroutine(K.EBezierShot(transform, damage, charges[j]));
+                        StartCoroutine(K.EBezierShot(transform, damage + K.chargeDamage, charges[j]));
                         break;
                     }
                 }

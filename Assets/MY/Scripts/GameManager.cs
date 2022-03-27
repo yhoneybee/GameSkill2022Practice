@@ -45,7 +45,7 @@ public class GameManager : Singletone<GameManager>
             {
                 Level++;
                 exp = 0;
-                //K.camera.IsMoving = true;
+                K.camera.IsMoving = true;
             }
 
             expLinker.MaxValue = NeedExp;

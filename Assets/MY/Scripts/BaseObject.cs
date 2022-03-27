@@ -24,7 +24,7 @@ public abstract class BaseObject : MonoBehaviour
         {
             if (value < hp)
             {
-                if (isNoDamage) return;
+                if (isNoDamage || noDamage) return;
                 NoDamageTime = 1.5f;
             }
             if (value > maxHp) hp = maxHp;
@@ -44,6 +44,8 @@ public abstract class BaseObject : MonoBehaviour
     public bool isPlayer;
 
     public bool isNoDamage;
+
+    public bool noDamage;
 
     public float NoDamageTime
     {
@@ -78,7 +80,7 @@ public abstract class BaseObject : MonoBehaviour
             var poolObj = K.PoolGet(ePOOL_TYPE.Boom, transform.position);
             poolObj.pool.WaitReturn(poolObj.obj, 3);
         }
-        K.Pool(objType).Return(gameObject);
+        if (!objType.Equals(ePOOL_TYPE.End)) K.Pool(objType).Return(gameObject);
     }
 
     public virtual IEnumerator EOnEnable()

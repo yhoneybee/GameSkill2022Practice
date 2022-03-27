@@ -6,7 +6,8 @@ public class Bacteria : BaseEnemy
 {
     public override IEnumerator EMove()
     {
-        yield return StartCoroutine(K.EMove(transform, new Vector3(Random.Range(-70.0f, 70.0f), 0, Random.Range(25.0f, 30.0f)), 2, 5, MoveType.Slerp));
+        yield return StartCoroutine(K.EMove(transform, new Vector3(Random.Range(-90.0f, 90.0f), 0, Random.Range(25.0f, 50.0f)), 2, 5, MoveType.Slerp));
+        yield return new WaitForSeconds(1);
         //yield return StartCoroutine(K.EKeepDistance(transform, Vector3.forward * 25, 30, 10 * Time.deltaTime));
 
         float time = Random.Range(0, 180);

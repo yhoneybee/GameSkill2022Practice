@@ -10,6 +10,7 @@ public class CameraMove : MonoBehaviour
         set
         {
             isMoving = value;
+            StopAllCoroutines();
             if (!value) StartCoroutine(EBack());
             else StartCoroutine(EMove());
         }
@@ -30,6 +31,7 @@ public class CameraMove : MonoBehaviour
     {
         K.timeScale = 0;
         float i = 0;
+        bool first = true;
         while (isMoving)
         {
             i += Time.deltaTime * 300;
@@ -37,6 +39,16 @@ public class CameraMove : MonoBehaviour
             var pos = K.Cricle(i, 30, K.player.transform.position);
             transform.position = new Vector3(pos.x, transform.position.y, pos.z);
             transform.LookAt(K.player.transform);
+
+            if (first)
+            {
+                if (Mathf.Abs(transform.position.y - K.player.transform.position.y + 10) > 0.01f)
+                {
+                    first = false;
+                    StartCoroutine(UIManager.Instance.EFade(true));
+                }
+            }
+
             yield return K.waitPointZeroOne;
         }
         yield return null;
@@ -44,7 +56,7 @@ public class CameraMove : MonoBehaviour
 
     public IEnumerator EBack()
     {
-        yield return K.EMove(transform, Vector3.up * 100, 3, 5, MoveType.Slerp);
+        yield return StartCoroutine(K.EMove(transform, Vector3.up * 100, 3, 5, MoveType.Slerp));
 
         var toRot = Quaternion.Euler(90, 0, 0);
 

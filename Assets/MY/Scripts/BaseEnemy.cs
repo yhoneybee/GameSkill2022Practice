@@ -6,6 +6,7 @@ public abstract class BaseEnemy : BaseObject
 {
     [Header("BaseEnemy---------------------------------------------------------------------------------------------------------------------------------")]
     public int score;
+    public int stage = 1;
 
     private void FixedUpdate()
     {

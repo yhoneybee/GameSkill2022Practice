@@ -6,31 +6,37 @@ public class Virus : BaseEnemy
 {
     [Header("Virus---------------------------------------------------------------------------------------------------------------------------------")]
     public int onceCount;
+    public Vector3 dir;
 
     public override IEnumerator EMove()
     {
-        yield return null;
+        float time = 0;
+        while (true)
+        {
+            yield return null;
+
+            time += Time.deltaTime;
+            transform.position += K.DT * Mathf.Sin(time / 2) * moveSpeed * dir;
+        }
     }
 
     public override IEnumerator EShot()
     {
         var wait = new WaitForSeconds(3);
-        Vector3 pos = Vector3.zero;
-        float time = 0;
+
         while (true)
         {
-            for (int i = 0; i < 3; i++)
-            {
-                time += Time.deltaTime * 5;
-
-                pos = K.Cricle(time * (i + 60), 30, transform.position);
-
-                K.Shot(pos, K.Cricle(Random.Range(0.0f, 180.0f), 30).normalized, 150, damage, false);
-
-                yield return K.waitPointZeroOne;
-            }
-
             yield return wait;
+
+            for (int i = 0; i < onceCount; i++)
+            {
+                yield return K.waitPointZeroOne;
+
+                for (int j = 0; j < 4; j++)
+                {
+                    K.Shot(transform.position, K.Cricle(45 + (i * 90), 30).normalized, 50, damage / 2, false);
+                }
+            }
         }
     }
 }

@@ -59,7 +59,7 @@ public class PlayerBulletInfo : MonoBehaviour
                     K.Shot(transform.position + Vector3.right * -6 + Vector3.back, Vector3.forward, 200, damage, true, throughCount);
                     break;
             }
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.07f);
         }
         yield return K.waitPointZeroOne;
     }

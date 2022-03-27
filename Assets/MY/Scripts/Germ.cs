@@ -59,10 +59,15 @@ public class Germ : BaseEnemy
 
         while (true)
         {
-            var pool = K.Shot<BaseBullet>(transform.position, (K.player.transform.position - transform.position).normalized, 100, damage, false);
-            //pool.obj.isSpeedIncrease = true;
-            //pool.obj.increaseSpeed = 3;
             yield return wait;
+            var pool = K.Shot<BaseBullet>(transform.position, (K.player.transform.position - transform.position).normalized, 100, damage, false);
+
+            if (GameManager.Instance.Stage == 2)
+            {
+                pool.obj.IsSpeedIncrease = true;
+                pool.obj.increaseSpeed = 3;
+            }
+
         }
     }
 }
