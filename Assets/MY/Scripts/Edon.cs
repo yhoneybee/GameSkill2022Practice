@@ -6,6 +6,9 @@ public class Edon : MonoBehaviour
 {
     public Player player;
     public float i;
+    public float radius = 15;
+    public bool isRotateClockDir;
+    public bool isDefenceable;
 
     private void Start()
     {
@@ -15,7 +18,7 @@ public class Edon : MonoBehaviour
 
     IEnumerator EShot()
     {
-        while (true)
+        while (!isDefenceable)
         {
             yield return StartCoroutine(K.EBezierShot(transform, player.damage / 2, 1, true));
             yield return new WaitForSeconds(1);
@@ -27,13 +30,25 @@ public class Edon : MonoBehaviour
         Vector3 pos = Vector3.zero;
         while (true)
         {
-            pos = K.Cricle(i, 15, player.transform.position);
+            pos = K.Cricle(i, radius, player.transform.position);
 
             transform.localPosition = pos;
 
-            i += player.edonsSpeed;
+            if (isRotateClockDir) i -= player.edonsSpeed;
+            else i += player.edonsSpeed;
 
             yield return K.waitPointZeroOne;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!isDefenceable) return;
+        var bullet = other.GetComponent<BaseBullet>();
+        if (bullet)
+        {
+            if (bullet.isShotByPlayer) return;
+            K.Pool(bullet.poolType).Return(bullet.gameObject);
         }
     }
 }

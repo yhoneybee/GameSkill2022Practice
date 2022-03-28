@@ -20,6 +20,11 @@ public class GameManager : Singletone<GameManager>
             pain = value;
 
             painLinker.CurValue = pain;
+
+            if (pain >= 100)
+            {
+                // 게임 오버 새드 엔딩
+            }
         }
     }
     public int pain;
@@ -31,6 +36,19 @@ public class GameManager : Singletone<GameManager>
         {
             level = value;
             txtLevel.text = $"LV. {level}";
+
+            if (level == 10 && Stage == 1)
+            {
+                // 보스 소환, 뒤지면 아래 코드 실행
+                //GameManager.Instance.Stage++;
+                EnemyManager.Instance.isBossSpawned = true;
+            }
+            else if (level == 20 && Stage == 2)
+            {
+                // 보스 소환, 뒤지면 아래 코드 실행
+                // 해피 엔딩으로 이동
+                EnemyManager.Instance.isBossSpawned = true;
+            }
         }
     }
     public int exp;

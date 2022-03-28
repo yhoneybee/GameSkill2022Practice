@@ -67,7 +67,6 @@ public class Germ : BaseEnemy
                 pool.obj.IsSpeedIncrease = true;
                 pool.obj.increaseSpeed = 3;
             }
-
         }
     }
 }

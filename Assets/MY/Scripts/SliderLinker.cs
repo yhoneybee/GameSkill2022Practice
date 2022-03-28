@@ -63,7 +63,7 @@ public class SliderLinker : MonoBehaviour
     {
         while (true)
         {
-            sub.value = Mathf.Lerp(sub.value, main.value, Time.deltaTime * 3);
+            sub.value = Mathf.Lerp(sub.value, main.value, Time.deltaTime * 2);
 
             yield return K.waitPointZeroOne;
         }

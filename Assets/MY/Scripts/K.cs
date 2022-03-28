@@ -18,7 +18,12 @@ public static class K
 
     public static BaseEnemy GetNearEnemy(Transform trn)
     {
-        return enemies.FindAll(x => x.gameObject.activeSelf).OrderBy(x => Vector3.Distance(trn.position, x.transform.position)).FirstOrDefault();
+        return enemies.FindAll(x => x.gameObject.activeSelf && trn.gameObject != x.gameObject).OrderBy(x => Vector3.Distance(trn.position, x.transform.position)).FirstOrDefault();
+    }
+
+    public static BaseEnemy GetNearEnemy(List<BaseEnemy> list, Transform trn)
+    {
+        return list.FindAll(x => x.gameObject.activeSelf && trn.gameObject != x.gameObject).OrderBy(x => Vector3.Distance(trn.position, x.transform.position)).FirstOrDefault();
     }
 
     public static ObjPool Pool(ePOOL_TYPE type) => pools[((int)type)];

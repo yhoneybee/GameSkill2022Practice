@@ -14,7 +14,9 @@ public class Player : BaseObject
     public Vector2 moveRange;
     public float edonsSpeed;
     public int edonsCount;
+    public int shieldsCount;
     public List<Edon> edons = new List<Edon>();
+    public List<Edon> shields = new List<Edon>();
     public PlayerBulletInfo playerBulletInfo;
     public float[] theta = { 115, 85, 72 };
     public float chargingSpeed;
@@ -128,6 +130,16 @@ public class Player : BaseObject
         {
             edons[i].gameObject.SetActive(true);
             edons[i].i = 360 / count * i;
+        }
+    }
+
+    public void ShieldsPosReset(int count)
+    {
+        if (count > shields.Count) return;
+        for (int i = 0; i < count; i++)
+        {
+            shields[i].gameObject.SetActive(true);
+            shields[i].i = 360 / count * i;
         }
     }
 }

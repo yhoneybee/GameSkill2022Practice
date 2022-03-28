@@ -12,31 +12,8 @@ public enum MoveType
 
 public class EnemyManager : Singletone<EnemyManager>
 {
-    public SphereCollider origin;
     public int state;
-
-    public int stateCount;
-    public int StateCount
-    {
-        get => stateCount;
-        set
-        {
-            stateCount = value;
-            if (stateCount >= 15)
-            {
-                if (GameManager.Instance.Stage == 1)
-                {
-                    // 보스 소환, 뒤지면 아래 코드 실행
-                    //GameManager.Instance.Stage++;
-                }
-                else
-                {
-                    // 보스 소환, 뒤지면 아래 코드 실행
-                    // 해피 엔딩으로 이동
-                }
-            }
-        }
-    }
+    public bool isBossSpawned;
 
     private void Start()
     {
@@ -47,24 +24,19 @@ public class EnemyManager : Singletone<EnemyManager>
     {
         while (true)
         {
-            if (K.DT <= 0)
+            if (K.DT <= 0 || isBossSpawned)
             {
                 yield return null;
                 continue;
             }
-            switch (GameManager.Instance.stage)
-            {
-                case 1:
-                    yield return StartCoroutine(Stage1());
-                    break;
-            }
+            yield return StartCoroutine(Stage());
             yield return new WaitForSeconds(20);
         }
     }
 
-    private IEnumerator Stage1()
+    private IEnumerator Stage()
     {
-        state = Random.Range(0, 5);
+        state = Random.Range(0, 8);
         switch (state)
         {
             case 0:
@@ -87,6 +59,17 @@ public class EnemyManager : Singletone<EnemyManager>
             case 5:
                 SpawnBacterias(3, 5);
                 StartCoroutine(ESpawnVirus());
+                break;
+            case 6:
+                SpawnGerms(3);
+                SpawnGerms(3);
+                K.PoolGet<CancerCell>(ePOOL_TYPE.CancerCell, new Vector3(50, 0, 30));
+                K.PoolGet<CancerCell>(ePOOL_TYPE.CancerCell, new Vector3(-50, 0, 30));
+                break;
+            case 7:
+                StartCoroutine(ESpawnVirus());
+                K.PoolGet<CancerCell>(ePOOL_TYPE.CancerCell, new Vector3(50, 0, 30));
+                K.PoolGet<CancerCell>(ePOOL_TYPE.CancerCell, new Vector3(-50, 0, 30));
                 break;
         }
         yield return null;
@@ -130,11 +113,11 @@ public class EnemyManager : Singletone<EnemyManager>
 
     private void SpawnBacterias(int min, int max)
     {
-        for (int i = 0; i < Random.Range(min, max + 1); i++)
+        for (int i = 0; i < Random.Range(min + GameManager.Instance.Level, max + 1 + GameManager.Instance.Level); i++)
         {
             K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(200, 0, 400)).obj.MaxHp = 4 * GameManager.Instance.Level;
         }
-        for (int i = 0; i < Random.Range(min, max + 1); i++)
+        for (int i = 0; i < Random.Range(min + GameManager.Instance.Level, max + 1 + GameManager.Instance.Level); i++)
         {
             K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(-200, 0, 400)).obj.MaxHp = 4 * GameManager.Instance.Level;
         }

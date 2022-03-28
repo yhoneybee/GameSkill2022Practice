@@ -130,7 +130,6 @@ public abstract class BaseObject : MonoBehaviour
             if (bullet.throughCount > 0)
             {
                 bullet.throughCount--;
-                if (bullet.damage > 0) bullet.damage--;
             }
             else
             {

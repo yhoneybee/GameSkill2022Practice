@@ -13,6 +13,7 @@ public enum ePOOL_TYPE
     Virus,
     Bezier,
     Effect,
+    CancerCell,
     End,
 }
 

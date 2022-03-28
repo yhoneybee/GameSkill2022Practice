@@ -31,10 +31,10 @@ public class LevelUpLinker : MonoBehaviour
     public Button btn;
     public Text txt;
 
-    public void RandomLevelUp()
-    {
-        LevelUp = (eLEVELUP)Random.Range(0, ((int)eLEVELUP.End));
-    }
+    //public void RandomLevelUp()
+    //{
+    //    LevelUp = (eLEVELUP)Random.Range(0, ((int)eLEVELUP.End));
+    //}
 
     void Start()
     {
@@ -46,10 +46,10 @@ public class LevelUpLinker : MonoBehaviour
                     K.player.EdonsPosReset(++K.player.edonsCount);
                     break;
                 case eLEVELUP.DamageAdd:
-                    K.playerDamage++;
+                    ++K.playerDamage;
                     break;
                 case eLEVELUP.MutiAdd:
-                    K.player.playerBulletInfo.multi++;
+                    ++K.player.playerBulletInfo.multi;
                     break;
                 case eLEVELUP.MaxHpAdd:
                     K.player.maxHp += 50;
@@ -59,13 +59,13 @@ public class LevelUpLinker : MonoBehaviour
                     // ½ºÅ³ ¾È¸¸µê
                     break;
                 case eLEVELUP.ShieldAdd:
-                    // ¾ÆÁ÷ ¾È¸¸µê
+                    K.player.ShieldsPosReset(++K.player.shieldsCount);
                     break;
                 case eLEVELUP.ChargeDamageAdd:
-                    K.chargeDamage++;
+                    ++K.chargeDamage;
                     break;
                 case eLEVELUP.ThroughAdd:
-                    K.throughCount++;
+                    ++K.throughCount;
                     break;
                 case eLEVELUP.End:
                     break;

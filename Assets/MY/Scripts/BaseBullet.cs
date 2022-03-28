@@ -28,7 +28,6 @@ public class BaseBullet : MonoBehaviour
     public virtual void OnEnable()
     {
         saveSpeed = moveSpeed;
-        throughCount = K.throughCount;
         StartCoroutine(EMove());
     }
 
