@@ -63,6 +63,7 @@ public class EnemyManager : Singletone<EnemyManager>
             case 6:
                 SpawnGerms(3);
                 SpawnGerms(3);
+                SpawnGerms(3);
                 K.PoolGet<CancerCell>(ePOOL_TYPE.CancerCell, new Vector3(50, 0, 30));
                 K.PoolGet<CancerCell>(ePOOL_TYPE.CancerCell, new Vector3(-50, 0, 30));
                 break;
@@ -82,7 +83,7 @@ public class EnemyManager : Singletone<EnemyManager>
             yield return new WaitForSeconds(1);
             var pool = K.PoolGet<Virus>(ePOOL_TYPE.Virus, new Vector3(0, 0, 20));
             pool.obj.onceCount = 5;
-            pool.obj.MaxHp = 16 * GameManager.Instance.Level;
+            pool.obj.MaxHp = 16 + 4 * GameManager.Instance.Level;
             pool.obj.dir = Vector3.right;
         }
         for (int i = 0; i < 3; i++)
@@ -90,7 +91,7 @@ public class EnemyManager : Singletone<EnemyManager>
             yield return new WaitForSeconds(1);
             var pool = K.PoolGet<Virus>(ePOOL_TYPE.Virus, new Vector3(0, 0, 20));
             pool.obj.onceCount = 5;
-            pool.obj.MaxHp = 16 * GameManager.Instance.Level;
+            pool.obj.MaxHp = 16 + 4 * GameManager.Instance.Level;
             pool.obj.dir = Vector3.left;
         }
     }
@@ -106,7 +107,7 @@ public class EnemyManager : Singletone<EnemyManager>
             pool.obj.i = i;
             pool.obj.rotateSpeed = 0.5f;
             pool.obj.radius = 40;
-            pool.obj.MaxHp = 8 * GameManager.Instance.Level;
+            pool.obj.MaxHp = 8 + 4 * GameManager.Instance.Level;
             pool.obj.isChangeRadius = isChangeRadius;
         }
     }
@@ -115,11 +116,11 @@ public class EnemyManager : Singletone<EnemyManager>
     {
         for (int i = 0; i < Random.Range(min + GameManager.Instance.Level, max + 1 + GameManager.Instance.Level); i++)
         {
-            K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(200, 0, 400)).obj.MaxHp = 4 * GameManager.Instance.Level;
+            K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(200, 0, 400)).obj.MaxHp = 4 + 4 * GameManager.Instance.Level;
         }
         for (int i = 0; i < Random.Range(min + GameManager.Instance.Level, max + 1 + GameManager.Instance.Level); i++)
         {
-            K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(-200, 0, 400)).obj.MaxHp = 4 * GameManager.Instance.Level;
+            K.PoolGet<Bacteria>(ePOOL_TYPE.Bacteria, new Vector3(-200, 0, 400)).obj.MaxHp = 4 + 4 * GameManager.Instance.Level;
         }
     }
 }
