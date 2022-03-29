@@ -22,6 +22,7 @@ public class Player : BaseObject
     public float chargingSpeed;
     public float chargeLifeTime;
     public Material matPlayer;
+    public List<Skill> skills = new List<Skill>();
 
     int[] charges = { 0, 3, 5, 8 };
 
@@ -36,6 +37,7 @@ public class Player : BaseObject
         yield return StartCoroutine(base.EOnEnable());
         StartCoroutine(ERotation());
         StartCoroutine(ECharge());
+        StartCoroutine(ECast());
     }
 
     void Update()
@@ -120,6 +122,27 @@ public class Player : BaseObject
             }
 
             yield return null;
+        }
+    }
+
+    private IEnumerator ECast()
+    {
+        while (true)
+        {
+            yield return null;
+
+            if (Input.GetButton("Fire2"))
+            {
+                skills[0].SkillCast();
+            }
+            if (Input.GetButton("Fire3"))
+            {
+                skills[1].SkillCast();
+            }
+            if (Input.GetButton("Fire4"))
+            {
+                skills[2].SkillCast();
+            }
         }
     }
 

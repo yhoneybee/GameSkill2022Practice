@@ -11,10 +11,11 @@ public static class K
     public static ObjPool[] pools = new ObjPool[((int)ePOOL_TYPE.End)];
     public static List<BaseEnemy> enemies = new List<BaseEnemy>();
     public static CameraMove camera;
-    public static string[] levelUpInfo = { "플레이어 주위를 공전하며\n자동공격하는 보조를 소환", "플레이어 공격력 증가", "플레이어 멀티샷 증가", "플레이어 최대 체력 증가", "플레이어 스킬 쿨타임 초기화", "플레이어 주위를 공전하며\n적의 공격을 방어하는\n보조를 소환", "플레이어 차지데미지 증가", "플레이어 관통 증가" };
+    public static string[] levelUpInfo = { "플레이어 주위를 공전하며\n자동공격하는 보조를 소환", "플레이어 공격력 증가", "플레이어 멀티샷 증가", "플레이어 최대 체력 증가", "플레이어 스킬 쿨타임 초기화", "플레이어 주위를 공전하며\n적의 공격을 방어하는\n보조를 소환", "플레이어 차지데미지 증가", "플레이어 관통 증가", "폭팔 스킬 데미지 증가" };
     public static int chargeDamage;
     public static int playerDamage;
     public static int throughCount;
+    public static int boomDamage = 15;
 
     public static BaseEnemy GetNearEnemy(Transform trn)
     {

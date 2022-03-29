@@ -126,14 +126,33 @@ public abstract class BaseObject : MonoBehaviour
         if (bullet)
         {
             if (isPlayer == bullet.isShotByPlayer) return;
-            Hp -= bullet.damage;
-            if (bullet.throughCount > 0)
+
+            if (bullet.isBoom)
             {
-                bullet.throughCount--;
+                var sphere = bullet.GetComponent<SphereCollider>();
+                sphere.radius = 50;
+                bullet.damage *= K.boomDamage + GameManager.Instance.Level;
+                var poolObj = K.PoolGet(ePOOL_TYPE.Boom, bullet.transform.position);
+                poolObj.obj.transform.localScale *= 10;
+                poolObj.pool.WaitReturn(poolObj.obj, 3);
+                bullet.isBoom = false;
+                bullet.dir = Vector3.zero;
+                K.Pool(bullet.poolType).WaitReturn(bullet.gameObject, 1);
+
+                Hp -= bullet.damage;
             }
             else
             {
-                K.Pool(bullet.poolType).Return(bullet.gameObject);
+                Hp -= bullet.damage;
+
+                if (bullet.throughCount > 0)
+                {
+                    bullet.throughCount--;
+                }
+                else
+                {
+                    K.Pool(bullet.poolType).Return(bullet.gameObject);
+                }
             }
         }
         else

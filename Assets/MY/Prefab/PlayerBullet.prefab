@@ -171,6 +171,8 @@ MonoBehaviour:
   damage: 0
   isShotByPlayer: 1
   throughCount: 0
+  isBoom: 0
+  radius: 2
   isSpeedIncrease: 0
   increaseSpeed: 0
   saveSpeed: 0

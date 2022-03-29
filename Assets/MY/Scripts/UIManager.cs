@@ -27,6 +27,7 @@ public class UIManager : Singletone<UIManager>
             idx = Random.Range(0, random.Count);
             levelUpLinkers[i].LevelUp = (eLEVELUP)random[idx];
             random.RemoveAt(idx);
+            levelUpLinkers[i].btn.enabled = true;
         }
 
         while (Mathf.Abs(imgFade.fillAmount - endV) > 0.01f)

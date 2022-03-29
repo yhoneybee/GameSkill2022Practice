@@ -13,6 +13,7 @@ public enum eLEVELUP
     ShieldAdd,
     ChargeDamageAdd,
     ThroughAdd,
+    BoomDamageAdd,
     End,
 }
 
@@ -31,13 +32,9 @@ public class LevelUpLinker : MonoBehaviour
     public Button btn;
     public Text txt;
 
-    //public void RandomLevelUp()
-    //{
-    //    LevelUp = (eLEVELUP)Random.Range(0, ((int)eLEVELUP.End));
-    //}
-
     void Start()
     {
+        btn.enabled = false;
         btn.onClick.AddListener(() => 
         {
             switch (levelUp)
@@ -57,6 +54,10 @@ public class LevelUpLinker : MonoBehaviour
                     break;
                 case eLEVELUP.SkillCoolReset:
                     // ½ºÅ³ ¾È¸¸µê
+                    for (int i = 0; i < 3; i++)
+                    {
+                        K.player.skills[i].curCoolDown = 0;
+                    }
                     break;
                 case eLEVELUP.ShieldAdd:
                     K.player.ShieldsPosReset(++K.player.shieldsCount);
@@ -66,6 +67,9 @@ public class LevelUpLinker : MonoBehaviour
                     break;
                 case eLEVELUP.ThroughAdd:
                     ++K.throughCount;
+                    break;
+                case eLEVELUP.BoomDamageAdd:
+                    ++K.boomDamage;
                     break;
                 case eLEVELUP.End:
                     break;

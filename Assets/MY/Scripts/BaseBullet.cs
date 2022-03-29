@@ -11,6 +11,8 @@ public class BaseBullet : MonoBehaviour
     public int damage;
     public bool isShotByPlayer;
     public int throughCount;
+    public bool isBoom;
+    public float radius;
 
     public bool isSpeedIncrease;
     public bool IsSpeedIncrease
@@ -31,12 +33,24 @@ public class BaseBullet : MonoBehaviour
         StartCoroutine(EMove());
     }
 
+    private void OnDisable()
+    {
+        var sphere = GetComponent<SphereCollider>();
+        if (sphere) sphere.radius = 2;
+    }
+
     private void FixedUpdate()
     {
-        if (Vector3.Distance(K.player.transform.position, transform.position) > 100)
+        if (isBoom)
         {
-            dir = Vector3.zero;
-            K.Pool(poolType).Return(gameObject);
+        }
+        else
+        {
+            if (Vector3.Distance(K.player.transform.position, transform.position) > 100)
+            {
+                dir = Vector3.zero;
+                K.Pool(poolType).Return(gameObject);
+            }
         }
     }
 

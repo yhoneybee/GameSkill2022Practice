@@ -48,6 +48,7 @@ public class ObjPool : MonoBehaviour
         }
 
         obj.transform.SetParent(transform);
+        obj.transform.localScale = goOrigin.transform.localScale;
         obj.transform.position = pos;
         obj.SetActive(true);
 

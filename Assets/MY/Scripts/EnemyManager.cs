@@ -61,9 +61,7 @@ public class EnemyManager : Singletone<EnemyManager>
                 StartCoroutine(ESpawnVirus());
                 break;
             case 6:
-                SpawnGerms(3);
-                SpawnGerms(3);
-                SpawnGerms(3);
+                SpawnGerms(9);
                 K.PoolGet<CancerCell>(ePOOL_TYPE.CancerCell, new Vector3(50, 0, 30));
                 K.PoolGet<CancerCell>(ePOOL_TYPE.CancerCell, new Vector3(-50, 0, 30));
                 break;
