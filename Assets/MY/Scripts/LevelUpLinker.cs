@@ -14,6 +14,11 @@ public enum eLEVELUP
     ChargeDamageAdd,
     ThroughAdd,
     BoomDamageAdd,
+    ChargeThroughAdd,
+    LaserDamageAdd,
+    OverloadingTimeAdd,
+    OverloadingRateAdd,
+    OverloadingDamageAdd,
     End,
 }
 
@@ -53,7 +58,6 @@ public class LevelUpLinker : MonoBehaviour
                     GameManager.Instance.hpLinker.MaxValue = K.player.MaxHp;
                     break;
                 case eLEVELUP.SkillCoolReset:
-                    // ½ºÅ³ ¾È¸¸µê
                     for (int i = 0; i < 3; i++)
                     {
                         K.player.skills[i].curCoolDown = 0;
@@ -71,7 +75,11 @@ public class LevelUpLinker : MonoBehaviour
                 case eLEVELUP.BoomDamageAdd:
                     ++K.boomDamage;
                     break;
-                case eLEVELUP.End:
+                case eLEVELUP.ChargeThroughAdd:
+                    ++K.chargeThroughCount;
+                    break;
+                case eLEVELUP.LaserDamageAdd:
+                    ++K.laserDamage;
                     break;
             }
 

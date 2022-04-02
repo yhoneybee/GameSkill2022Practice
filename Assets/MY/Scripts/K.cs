@@ -11,11 +11,31 @@ public static class K
     public static ObjPool[] pools = new ObjPool[((int)ePOOL_TYPE.End)];
     public static List<BaseEnemy> enemies = new List<BaseEnemy>();
     public static CameraMove camera;
-    public static string[] levelUpInfo = { "플레이어 주위를 공전하며\n자동공격하는 보조를 소환", "플레이어 공격력 증가", "플레이어 멀티샷 증가", "플레이어 최대 체력 증가", "플레이어 스킬 쿨타임 초기화", "플레이어 주위를 공전하며\n적의 공격을 방어하는\n보조를 소환", "플레이어 차지데미지 증가", "플레이어 관통 증가", "폭팔 스킬 데미지 증가" };
+    public static string[] levelUpInfo = { 
+        "플레이어 주위를 공전하며\n자동공격하는 보조를 소환",
+        "플레이어 공격력 증가",
+        "플레이어 멀티샷 증가",
+        "플레이어 최대 체력 증가",
+        "플레이어 스킬 쿨타임 초기화",
+        "플레이어 주위를 공전하며\n적의 공격을 방어하는\n보조를 소환",
+        "플레이어 차징데미지 증가",
+        "플레이어 관통 증가",
+        "폭팔 스킬 데미지 증가",
+        "플레이어 차징 관통 증가",
+        "플레이어 레이저 데미지 증가",
+        "과부화 지속시간 증가",
+        "과부화 공격속도 증가",
+        "과부화 데미지 증가"
+    };
     public static int chargeDamage;
     public static int playerDamage;
     public static int throughCount;
     public static int boomDamage = 15;
+    public static int chargeThroughCount;
+    public static int laserDamage = 3;
+    public static int overloadingTime;
+    public static int overloadingRate;
+    public static int overloadingDamage;
 
     public static BaseEnemy GetNearEnemy(Transform trn)
     {
@@ -121,11 +141,11 @@ public static class K
             for (int i = 0; i < GameManager.Instance.Level; i++)
             {
                 if (enemies.FindAll(x => x.gameObject.activeSelf).Count <= 0) continue;
-                //PoolGet<BezierBullet>(ePOOL_TYPE.Bezier, spawner.position).obj.Init(spawner, target, 6, 3);
                 var pool = PoolGet<BezierBullet>(ePOOL_TYPE.Bezier, spawner.position);
                 pool.obj.GetComponent<TrailRenderer>().Clear();
                 pool.obj.moveSpeed = 200;
                 pool.obj.damage = damage;
+                pool.obj.throughCount = chargeThroughCount;
                 pool.obj.Init(spawner, GetNearEnemy(player.transform).transform, 9, 6);
                 if (onlyOnce) break;
             }
